@@ -1,7 +1,11 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import logo from "@/assets/logo.svg";
+import secondaryImage from "@/assets/2nd-logo.png";
+import Image from "next/image";
+import { ArrowUpFromLine } from "lucide-react";
 
 type DressCard = {
   id: number;
@@ -55,12 +59,17 @@ export default function HomePage() {
   const [zoom, setZoom] = useState<number>(1);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [photoActionsOpen, setPhotoActionsOpen] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedDress = useMemo(
     () =>
       DRESS_CARDS.find((item) => item.id === selectedDressId) ?? DRESS_CARDS[0],
     [selectedDressId],
   );
+
+  const openFilePicker = () => {
+    fileInputRef.current?.click();
+  };
 
   useEffect(() => {
     return () => {
@@ -94,76 +103,114 @@ export default function HomePage() {
   };
 
   return (
-    <main className="virtual-page">
-      <section className="virtual-top-band">
-        Guest at the largest and most beautiful outfitter in Germany.
+    <main className="min-h-screen bg-[linear-gradient(180deg,#ebe8e5_0%,#e6e2df_65%,#dfdbd8_100%)] text-[#2b2624]">
+      <section className="px-4 py-2 text-center text-[#8d8179] sm:px-6 ">
+        Guest at the largest and{" "}
+        <span className="text-[#161215]">
+          most beautiful outfitter in Germany.
+        </span>
       </section>
 
-      <header className="virtual-header">
-        <div className="virtual-logo-wrap">
-          <p className="virtual-logo-mark">WW</p>
-          <p className="virtual-logo-text">WEDDING WORLD</p>
+      <header className="container mx-auto flex flex-col items-stretch justify-center gap-16 rounded-[0.35rem] bg-[#f6f4f2] px-4 py-4 shadow-[0_8px_24px_rgba(77,64,54,0.05)] sm:flex-row sm:items-center sm:gap-12 sm:px-5">
+        <div className="grid justify-items-center gap-1">
+          <Image src={logo} alt="Wedding World Logo" className="h-14 w-auto" />
         </div>
-        <nav className="virtual-actions">
-          <button type="button">BACK TO WEDDING WORLD</button>
-          <button type="button">VIEW 2026 COLLECTION</button>
-          <button type="button">BOOK APPOINTMENT</button>
+        <nav className="flex flex-wrap justify-center gap-2 sm:justify-end">
+          <button
+            type="button"
+            className="cursor-pointer border-0 bg-[#1f1a1b] px-3 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b] sm:px-4"
+          >
+            BACK TO WEDDING WORLD
+          </button>
+          <button
+            type="button"
+            className="cursor-pointer border-0 bg-[#1f1a1b] px-3 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b] sm:px-4"
+          >
+            VIEW 2026 COLLECTION
+          </button>
+          <button
+            type="button"
+            className="cursor-pointer border-0 bg-[#1f1a1b] px-3 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b] sm:px-4"
+          >
+            BOOK APPOINTMENT
+          </button>
         </nav>
       </header>
 
-      <section className="virtual-stage">
-        <div className="virtual-stage-title">
+      <section className="container mx-auto mb-8 mt-5 overflow-hidden rounded-[0.6rem] border border-[#ddd5cf] bg-[#f8f5f3] shadow-[0_18px_38px_rgba(77,64,54,0.08)]">
+        <div className="bg-[#ab8466] px-3 py-2 text-center text-[0.86rem] text-[#f7ede4]">
           The Wedding World Virtual Bridal Experience
         </div>
 
-        <div className="virtual-grid">
-          <aside className="upload-panel">
-            <h1>
-              SEE YOURSELF AS A <span>bride</span>
-            </h1>
-            <p>
+        <div className="grid min-h-160 grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)_minmax(0,1.95fr)_minmax(0,1.15fr)]">
+          <aside className="border-t border-[#e7dfd9] p-4 xl:border-t-0 xl:border-r xl:p-5">
+            <Image
+              src={secondaryImage}
+              alt="Virtual Fitting Room"
+              className="w-full h-auto"
+            />
+            <p className="mt-6 leading-6 text-[#161215]">
               Curious how your dream dress looks on you? Try on your favorite
               dress now in our virtual fitting room. Upload a photo of yourself
               and get a first impression of your fitting.
             </p>
 
             <input
+              ref={fileInputRef}
               id="upload-photo"
               accept="image/*"
               type="file"
-              className="hidden-input"
+              className="sr-only"
               onChange={onUpload}
             />
 
-            <label className="upload-box" htmlFor="upload-photo">
+            <div className="relative mt-2 overflow-hidden rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
               {!uploadedImage ? (
-                <>
-                  <span className="upload-icon">⇪</span>
-                  <span>Upload your photo</span>
-                </>
+                <button
+                  type="button"
+                  onClick={openFilePicker}
+                  className="flex min-h-64 w-full cursor-pointer flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,#fbf7f3_0%,#f5eee8_100%)] px-6 py-10 text-[#b48b6a] transition hover:bg-[#f7f0ea]"
+                >
+                  <ArrowUpFromLine />
+                  <span className="text-sm tracking-[0.16em] underline decoration-[#d7c1af] underline-offset-4">
+                    Upload your photo
+                  </span>
+                </button>
               ) : (
                 <>
                   <img
                     src={uploadedImage}
                     alt="Uploaded user"
-                    className="uploaded-preview"
+                    className="h-64 w-full object-cover"
                   />
                   <button
-                    className="photo-open-hotspot"
                     type="button"
+                    className="absolute bottom-3 left-3 grid h-9 w-9 place-items-center rounded-lg bg-[#312425]/60 text-lg text-white shadow-lg backdrop-blur-sm transition hover:bg-[#312425]/75"
                     onClick={(event) => {
                       event.preventDefault();
                       setPhotoActionsOpen((current) => !current);
                     }}
                     aria-label="Open photo actions"
+                    aria-expanded={photoActionsOpen}
                   >
                     ☝
                   </button>
                   {photoActionsOpen ? (
-                    <div className="photo-actions">
-                      <label htmlFor="upload-photo">Change photo</label>
+                    <div className="absolute bottom-3 right-3 grid w-32 gap-2">
                       <button
                         type="button"
+                        className="w-full rounded-md border-0 bg-[rgba(46,36,31,0.68)] px-2.5 py-2 text-left text-[0.8rem] text-white transition hover:bg-[rgba(46,36,31,0.78)]"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          openFilePicker();
+                          setPhotoActionsOpen(false);
+                        }}
+                      >
+                        Change photo
+                      </button>
+                      <button
+                        type="button"
+                        className="w-full rounded-md border-0 bg-[rgba(234,83,83,0.2)] px-2.5 py-2 text-left text-[0.8rem] text-[#9e1e1e] transition hover:bg-[rgba(234,83,83,0.28)]"
                         onClick={(event) => {
                           event.preventDefault();
                           removePhoto();
@@ -175,54 +222,75 @@ export default function HomePage() {
                   ) : null}
                 </>
               )}
-            </label>
+            </div>
 
-            <button type="button" className="try-on-button">
+            <button
+              type="button"
+              className="mt-3 w-full cursor-pointer rounded-[0.35rem] border-0 bg-[linear-gradient(90deg,#f515cb_0%,#4438cb_100%)] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] shadow-[0_12px_22px_rgba(77,62,151,0.25)] transition hover:brightness-105"
+            >
               ✨ TRY ON
             </button>
           </aside>
 
-          <section className="catalog-panel">
-            <h2>Wedding Dresses</h2>
-            <ul>
-              <li>
+          <section className="border-t border-[#e7dfd9] p-4 xl:border-t-0 xl:border-r xl:p-5">
+            <h2 className="m-0 text-[1.7rem] font-semibold tracking-[0.01em]">
+              Wedding Dresses
+            </h2>
+            <ul className="m-0 mt-4 grid list-none gap-2 p-0">
+              <li className="border-b border-[#ddd3ca] pb-2 text-[0.95rem] text-[#584d46]">
                 Silhouette <strong>A-Line</strong>
               </li>
-              <li>Mermaid</li>
-              <li>Fit &amp; Flare</li>
-              <li>Straight / Column</li>
-              <li>Princess</li>
+              <li className="border-b border-[#ddd3ca] pb-2 text-[0.95rem] text-[#584d46]">
+                Mermaid
+              </li>
+              <li className="border-b border-[#ddd3ca] pb-2 text-[0.95rem] text-[#584d46]">
+                Fit &amp; Flare
+              </li>
+              <li className="border-b border-[#ddd3ca] pb-2 text-[0.95rem] text-[#584d46]">
+                Straight / Column
+              </li>
+              <li className="border-b border-[#ddd3ca] pb-2 text-[0.95rem] text-[#584d46]">
+                Princess
+              </li>
             </ul>
 
-            <div className="catalog-thumbs">
+            <div className="mt-4 grid grid-cols-3 gap-2">
               {DRESS_CARDS.map((card) => (
                 <button
                   key={card.id}
                   type="button"
-                  className={
-                    card.id === selectedDressId ? "thumb active" : "thumb"
-                  }
+                  className={`overflow-hidden rounded-[0.42rem] border bg-transparent p-0 transition ${
+                    card.id === selectedDressId
+                      ? "border-[#b48c6c]"
+                      : "border-transparent hover:border-[#d7c1af]"
+                  }`}
                   onClick={() => setSelectedDressId(card.id)}
                 >
-                  <img src={card.image} alt={card.name} />
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    className="aspect-3/4 w-full object-cover"
+                  />
                 </button>
               ))}
             </div>
           </section>
 
-          <section className="preview-panel">
-            <div className="preview-frame">
+          <section className="relative border-t border-[#e7dfd9] p-4 xl:border-t-0 xl:border-r xl:p-5">
+            <div className="min-h-105 overflow-hidden rounded-[0.7rem] bg-[#eee5de] sm:min-h-130 xl:min-h-147">
               <img
                 src={selectedDress.image}
                 alt={selectedDress.name}
+                className="h-full w-full origin-[50%_38%] object-cover transition-transform duration-200"
                 style={{ transform: `scale(${zoom})` }}
               />
             </div>
 
-            <div className="zoom-controls">
+            <div className="absolute right-7 top-6 grid gap-2">
               <button
                 type="button"
                 aria-label="Zoom in"
+                className="grid h-8 w-8 cursor-pointer place-items-center rounded-[0.3rem] border-0 bg-[rgba(34,34,34,0.45)] text-[1.15rem] leading-none text-[#f6f5f5] transition hover:bg-[rgba(34,34,34,0.55)]"
                 onClick={() =>
                   setZoom((value) =>
                     Math.min(2.4, Number((value + 0.15).toFixed(2))),
@@ -234,6 +302,7 @@ export default function HomePage() {
               <button
                 type="button"
                 aria-label="Zoom out"
+                className="grid h-8 w-8 cursor-pointer place-items-center rounded-[0.3rem] border-0 bg-[rgba(34,34,34,0.45)] text-[1.15rem] leading-none text-[#f6f5f5] transition hover:bg-[rgba(34,34,34,0.55)]"
                 onClick={() =>
                   setZoom((value) =>
                     Math.max(1, Number((value - 0.15).toFixed(2))),
@@ -245,25 +314,48 @@ export default function HomePage() {
             </div>
           </section>
 
-          <aside className="side-panel">
-            <div className="side-list">
+          <aside className="flex flex-col justify-between gap-4 border-t border-[#e7dfd9] p-4 xl:border-t-0 xl:p-5">
+            <div className="grid gap-3 rounded-lg bg-[#ece6e1] p-3">
               {DRESS_CARDS.slice(0, 3).map((card) => (
                 <button
                   key={`side-${card.id}`}
                   type="button"
+                  className="grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45"
                   onClick={() => setSelectedDressId(card.id)}
                 >
-                  <img src={card.image} alt={card.name} />
-                  <span>{card.name}</span>
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    className="h-19 w-14 rounded-[0.28rem] object-cover"
+                  />
+                  <span className="text-[0.9rem] text-[#3f3734]">
+                    {card.name}
+                  </span>
                 </button>
               ))}
             </div>
 
-            <div className="email-box">
-              <h3>Send me my photos via email.</h3>
-              <input type="email" placeholder="EMAIL" />
-              <button type="button">SEND</button>
-              <button type="button">BOOK APPOINTMENT</button>
+            <div>
+              <h3 className="mb-3 text-[1.55rem] font-semibold leading-[1.18] sm:text-[2rem]">
+                Send me my photos via email.
+              </h3>
+              <input
+                type="email"
+                placeholder="EMAIL"
+                className="mb-2 w-full rounded-[0.3rem] border border-[#ded6d0] bg-[#f7f5f4] px-3 py-2.5 text-[#4d4642] outline-none transition placeholder:text-[#8f837b] focus:border-[#b48c6c]"
+              />
+              <button
+                type="button"
+                className="mt-1 w-full cursor-pointer border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
+              >
+                SEND
+              </button>
+              <button
+                type="button"
+                className="mt-2 w-full cursor-pointer border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
+              >
+                BOOK APPOINTMENT
+              </button>
             </div>
           </aside>
         </div>
