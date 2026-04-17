@@ -12,6 +12,8 @@ import {
   ChevronRight,
   Trash2,
   WandSparkles,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 
 type DressCard = {
@@ -229,7 +231,7 @@ export default function HomePage() {
                       >
                         <ArrowLeftRight className="h-4 w-4" />
                         Change photo
-                      </button>  
+                      </button>
                       <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-[0.55rem] border border-white/10 bg-[#918987]/88 px-3 py-2.5 text-left text-[0.8rem] text-[#ff2d83] shadow-[0_10px_22px_rgba(42,35,35,0.25)] backdrop-blur-[2px] transition hover:bg-[#9d9593]/95"
@@ -342,30 +344,30 @@ export default function HomePage() {
                 />
               </div>
 
-              <div className="absolute right-7 top-6 grid gap-2">
+              <div className="absolute right-7 top-12 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
                 <button
                   type="button"
                   aria-label="Zoom in"
-                  className="grid h-8 w-8 cursor-pointer place-items-center rounded-[0.3rem] border-0 bg-[rgba(34,34,34,0.45)] text-[1.15rem] leading-none text-[#f6f5f5] transition hover:bg-[rgba(34,34,34,0.55)]"
+                  className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
                   onClick={() =>
                     setZoom((value) =>
                       Math.min(2.4, Number((value + 0.15).toFixed(2))),
                     )
                   }
                 >
-                  +
+                  <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
                 </button>
                 <button
                   type="button"
                   aria-label="Zoom out"
-                  className="grid h-8 w-8 cursor-pointer place-items-center rounded-[0.3rem] border-0 bg-[rgba(34,34,34,0.45)] text-[1.15rem] leading-none text-[#f6f5f5] transition hover:bg-[rgba(34,34,34,0.55)]"
+                  className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
                   onClick={() =>
                     setZoom((value) =>
                       Math.max(1, Number((value - 0.15).toFixed(2))),
                     )
                   }
                 >
-                  -
+                  <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
                 </button>
               </div>
             </section>
