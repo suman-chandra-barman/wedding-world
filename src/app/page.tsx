@@ -5,7 +5,14 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import logo from "@/assets/logo.svg";
 import secondaryImage from "@/assets/2nd-logo.png";
 import Image from "next/image";
-import { ArrowUpFromLine, ChevronDown, ChevronRight } from "lucide-react";
+import {
+  ArrowLeftRight,
+  ArrowUpFromLine,
+  ChevronDown,
+  ChevronRight,
+  Trash2,
+  WandSparkles,
+} from "lucide-react";
 
 type DressCard = {
   id: number;
@@ -76,7 +83,6 @@ export default function HomePage() {
   const [isSilhouetteOpen, setIsSilhouetteOpen] = useState<boolean>(true);
   const [zoom, setZoom] = useState<number>(1);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [photoActionsOpen, setPhotoActionsOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedDress = useMemo(
@@ -109,7 +115,6 @@ export default function HomePage() {
 
     const nextImage = URL.createObjectURL(file);
     setUploadedImage(nextImage);
-    setPhotoActionsOpen(false);
   };
 
   const removePhoto = () => {
@@ -117,7 +122,6 @@ export default function HomePage() {
       URL.revokeObjectURL(uploadedImage);
     }
     setUploadedImage(null);
-    setPhotoActionsOpen(false);
   };
 
   const onSelectSilhouette = (option: SilhouetteOption) => {
@@ -172,6 +176,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid min-h-160 grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)_minmax(0,1.95fr)_minmax(0,1.15fr)]">
+            {/* Sidebar with upload and info */}
             <aside className="bg-[#F6F5F3] xl:p-5">
               <Image
                 src={secondaryImage}
@@ -193,7 +198,7 @@ export default function HomePage() {
                 onChange={onUpload}
               />
 
-              <div className="relative mt-2 overflow-hidden rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+              <div className="group relative mt-2 overflow-hidden rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
                 {!uploadedImage ? (
                   <button
                     type="button"
@@ -212,52 +217,40 @@ export default function HomePage() {
                       alt="Uploaded user"
                       className="h-57 w-full object-cover"
                     />
-                    <button
-                      type="button"
-                      className="absolute bottom-3 left-3 grid h-9 w-9 place-items-center rounded-lg bg-[#312425]/60 text-lg text-white shadow-lg backdrop-blur-sm transition hover:bg-[#312425]/75"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        setPhotoActionsOpen((current) => !current);
-                      }}
-                      aria-label="Open photo actions"
-                      aria-expanded={photoActionsOpen}
-                    >
-                      ☝
-                    </button>
-                    {photoActionsOpen ? (
-                      <div className="absolute bottom-3 right-3 grid w-32 gap-2">
-                        <button
-                          type="button"
-                          className="w-full rounded-md border-0 bg-[rgba(46,36,31,0.68)] px-2.5 py-2 text-left text-[0.8rem] text-white transition hover:bg-[rgba(46,36,31,0.78)]"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            openFilePicker();
-                            setPhotoActionsOpen(false);
-                          }}
-                        >
-                          Change photo
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full rounded-md border-0 bg-[rgba(234,83,83,0.2)] px-2.5 py-2 text-left text-[0.8rem] text-[#9e1e1e] transition hover:bg-[rgba(234,83,83,0.28)]"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            removePhoto();
-                          }}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ) : null}
+                    <div className="pointer-events-none absolute inset-0 bg-[#6f6664]/46 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100" />
+                    <div className="pointer-events-none absolute bottom-4 right-2 grid w-40 gap-2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                      <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-[0.55rem] border border-white/10 bg-[#918987]/88 px-3 py-2.5 text-left text-[0.8rem] text-[#f8f6f5] shadow-[0_10px_22px_rgba(42,35,35,0.25)] backdrop-blur-[2px] transition hover:bg-[#9d9593]/95"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          openFilePicker();
+                        }}
+                      >
+                        <ArrowLeftRight className="h-4 w-4" />
+                        Change photo
+                      </button>  
+                      <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-[0.55rem] border border-white/10 bg-[#918987]/88 px-3 py-2.5 text-left text-[0.8rem] text-[#ff2d83] shadow-[0_10px_22px_rgba(42,35,35,0.25)] backdrop-blur-[2px] transition hover:bg-[#9d9593]/95"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          removePhoto();
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Remove
+                      </button>
+                    </div>
                   </>
                 )}
               </div>
 
               <button
                 type="button"
-                className="mt-3 w-full cursor-pointer rounded-[0.35rem] border-0 bg-[linear-gradient(90deg,#f515cb_0%,#4438cb_100%)] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] shadow-[0_12px_22px_rgba(77,62,151,0.25)] transition hover:brightness-105"
+                className="mt-3 w-full flex items-center justify-center gap-4 cursor-pointer rounded-[0.35rem] border-0 bg-[linear-gradient(90deg,#f515cb_0%,#4438cb_100%)] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] shadow-[0_12px_22px_rgba(77,62,151,0.25)] transition hover:brightness-105"
               >
-                ✨ TRY ON
+                <WandSparkles /> TRY ON
               </button>
             </aside>
 
