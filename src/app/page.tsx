@@ -71,9 +71,8 @@ const SILHOUETTE_OPTIONS: SilhouetteOption[] = [
   { label: "Mermaid", dressId: 2 },
   { label: "Fit & Flare", dressId: 3 },
   { label: "Straight / Column", dressId: 4 },
+  { label: "Princess", dressId: 5 },
 ];
-
-const PRINCESS_DRESS_ID = 5;
 
 export default function HomePage() {
   const [selectedDressId, setSelectedDressId] = useState<number>(
@@ -82,7 +81,6 @@ export default function HomePage() {
   const [selectedSilhouette, setSelectedSilhouette] = useState<string>(
     SILHOUETTE_OPTIONS[0].label,
   );
-  const [isSilhouetteOpen, setIsSilhouetteOpen] = useState<boolean>(true);
   const [zoom, setZoom] = useState<number>(1);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -128,12 +126,6 @@ export default function HomePage() {
 
   const onSelectSilhouette = (option: SilhouetteOption) => {
     setSelectedSilhouette(option.label);
-    setSelectedDressId(option.dressId);
-  };
-
-  const onSelectPrincess = () => {
-    setSelectedSilhouette("Princess");
-    setSelectedDressId(PRINCESS_DRESS_ID);
   };
 
   return (
@@ -256,60 +248,41 @@ export default function HomePage() {
               </button>
             </aside>
 
+            {/* Wedding Dresses Section */}
             <section className="bg-white xl:p-5">
               <h2 className="m-0 text-[1.7rem] font-semibold tracking-[0.01em]">
                 Wedding Dresses
               </h2>
               <div className="mt-7 max-w-55">
-                <button
-                  type="button"
-                  onClick={() => setIsSilhouetteOpen((value) => !value)}
-                  className="flex w-full items-center justify-between border-0 bg-transparent p-0 text-left font-semibold text-[#ac8464]"
-                >
-                  <span className="leading-none font-bold">Silhouette</span>
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${
-                      isSilhouetteOpen ? "rotate-0" : "-rotate-90"
-                    }`}
-                  />
-                </button>
+                <p className="leading-none font-bold text-[#ac8464]">
+                  Silhouette
+                </p>
 
-                {isSilhouetteOpen ? (
-                  <ul className="m-0 mt-3 list-none p-0">
-                    {SILHOUETTE_OPTIONS.map((option) => (
-                      <li
-                        key={option.label}
-                        className="border-b border-[#ccb7a6] pb-2 pt-1 mt-4"
-                      >
+                <ul className="m-0 mt-4 list-none p-0 space-y-4">
+                  {SILHOUETTE_OPTIONS.map((option) => (
+                    <li key={option.label}>
+                      {selectedSilhouette === option.label ? (
                         <button
                           type="button"
-                          className={`flex w-full items-center justify-between border-0 bg-transparent p-0 text-left  transition ${
-                            selectedSilhouette === option.label
-                              ? "font-medium text-[#241d1b]"
-                              : "text-[#2f2724] hover:text-[#221b19]"
-                          }`}
+                          className="flex w-full items-center justify-start gap-2 border-0 bg-transparent p-0 text-left font-semibold text-[#ac8464] transition"
+                          onClick={() => onSelectSilhouette(option)}
+                        >
+                          <span className="leading-[1.05]">{option.label}</span>
+                          <ChevronDown className="h-4 w-4" />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between border-0 bg-transparent p-0 text-left font-medium text-[#1f1a1b] transition hover:text-[#6f5540]"
                           onClick={() => onSelectSilhouette(option)}
                         >
                           <span className="leading-[1.05]">{option.label}</span>
                           <ChevronRight className="h-4 w-4 text-[#ac8464]" />
                         </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                <button
-                  type="button"
-                  onClick={onSelectPrincess}
-                  className={`mt-7 flex w-full items-center justify-between border-0 bg-transparent p-0 text-left transition font-bold ${
-                    selectedSilhouette === "Princess"
-                      ? "font-semibold text-[#ac8464]"
-                      : "text-[#ac8464] hover:text-[#987357]"
-                  }`}
-                >
-                  <span className="leading-[1.05]">Princess</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               <div className="mt-4 grid grid-cols-3 gap-2">
