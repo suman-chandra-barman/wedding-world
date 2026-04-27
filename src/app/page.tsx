@@ -3,7 +3,7 @@
 
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import logo from "@/assets/logo.svg";
-import secondaryImage from "@/assets/2nd-logo.png";
+import secondaryImage from "@/assets/secondary logo.png";
 import Image from "next/image";
 import {
   ArrowLeftRight,
@@ -130,40 +130,40 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen text-[#2b2624]">
-      <section className="bg-[#EDEAE6] px-4 py-2 text-center text-[#8d8179] sm:px-6 ">
-        Guest at the largest and{" "}
-        <span className="text-[#161215]">
-          most beautiful outfitter in Germany.
+      <section className="bg-[#EDEAE6] px-6 py-3 text-center text-[#8d8179] sm:px-8 flex flex-col items-center sm:flex-row sm:justify-center sm:gap-2">
+        <span>Guest at the largest and </span>{"  "}
+        <span className="text-[#161215] ">
+          most beautiful out&shy;fitter in Germany.
         </span>
       </section>
 
-      <header className="container mx-auto bg-white flex flex-col items-stretch justify-center gap-16 rounded-[0.35rem] px-4 py-4 sm:flex-row sm:items-center sm:gap-12 sm:px-5">
+      <header className="container mx-auto flex flex-col items-stretch justify-center gap-16 rounded-[0.35rem] bg-white p-4 sm:flex-row sm:items-center sm:gap-12 sm:px-8">
         <div className="grid justify-items-center gap-1">
           <Image src={logo} alt="Wedding World Logo" className="h-14 w-auto" />
         </div>
         <nav className="flex flex-wrap justify-center gap-2 sm:justify-end">
           <button
             type="button"
-            className="cursor-pointer border-0 bg-[#1f1a1b] px-3 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b] sm:px-4"
+            className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
           >
             BACK TO WEDDING WORLD
           </button>
           <button
             type="button"
-            className="cursor-pointer border-0 bg-[#1f1a1b] px-3 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b] sm:px-4"
+            className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
           >
             VIEW 2026 COLLECTION
           </button>
           <button
             type="button"
-            className="cursor-pointer border-0 bg-[#1f1a1b] px-3 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b] sm:px-4"
+            className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
           >
             BOOK APPOINTMENT
           </button>
         </nav>
       </header>
 
-      <section className="bg-[#EDEAE6] pb-8 pt-5 ">
+      <section className="bg-[#EDEAE6] pb-8 px-2 py-4 sm:p-4">
         <div className="container mx-auto overflow-hidden rounded-[0.6rem] bg-[#f8f5f3]">
           <div className="bg-[#ab8466] px-3 py-2 text-center text-[0.86rem] text-[#f7ede4]">
             The Wedding World Virtual Bridal Experience
@@ -175,9 +175,9 @@ export default function HomePage() {
               <Image
                 src={secondaryImage}
                 alt="Virtual Fitting Room"
-                className="w-full h-auto"
+                className="w-full h-auto p-8 xl:p-0"
               />
-              <p className="mt-6 leading-6 text-[#161215]">
+              <p className="mt-0 mb-8 md:my-6  leading-6 text-[#161215] p-4 xl:p-0">
                 Curious how your dream dress looks on you? Try on your favorite
                 dress now in our virtual fitting room. Upload a photo of
                 yourself and get a first impression of your fitting.
@@ -192,7 +192,7 @@ export default function HomePage() {
                 onChange={onUpload}
               />
 
-              <div className="group relative mt-2 overflow-hidden rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+              <div className="group relative overflow-hidden rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
                 {!uploadedImage ? (
                   <button
                     type="button"
@@ -215,7 +215,7 @@ export default function HomePage() {
                     <div className="pointer-events-none absolute bottom-4 right-2 grid w-40 gap-2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
                       <button
                         type="button"
-                        className="flex w-full items-center gap-2 rounded-[0.55rem] border border-white/10 bg-[#918987]/88 px-3 py-2.5 text-left text-[0.8rem] text-[#f8f6f5] shadow-[0_10px_22px_rgba(42,35,35,0.25)] backdrop-blur-[2px] transition hover:bg-[#9d9593]/95"
+                        className="flex w-full items-center gap-2 rounded-none border border-white/10 bg-[#1f1a1b] px-3 py-2.5 text-left text-[0.8rem] text-[#f8f6f5] shadow-[0_10px_22px_rgba(42,35,35,0.25)] transition hover:bg-[#30292b]"
                         onClick={(event) => {
                           event.preventDefault();
                           openFilePicker();
@@ -226,7 +226,7 @@ export default function HomePage() {
                       </button>
                       <button
                         type="button"
-                        className="flex w-full items-center gap-2 rounded-[0.55rem] border border-white/10 bg-[#918987]/88 px-3 py-2.5 text-left text-[0.8rem] text-[#ff2d83] shadow-[0_10px_22px_rgba(42,35,35,0.25)] backdrop-blur-[2px] transition hover:bg-[#9d9593]/95"
+                        className="flex w-full items-center gap-2 rounded-none border border-white/10 bg-[#1f1a1b] px-3 py-2.5 text-left text-[0.8rem] text-[#f8f6f5] shadow-[0_10px_22px_rgba(42,35,35,0.25)] transition hover:bg-[#30292b]"
                         onClick={(event) => {
                           event.preventDefault();
                           removePhoto();
@@ -242,18 +242,18 @@ export default function HomePage() {
 
               <button
                 type="button"
-                className="mt-3 w-full flex items-center justify-center gap-4 cursor-pointer rounded-[0.35rem] border-0 bg-[linear-gradient(90deg,#f515cb_0%,#4438cb_100%)] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] shadow-[0_12px_22px_rgba(77,62,151,0.25)] transition hover:brightness-105"
+                className="mt-5 flex w-full cursor-pointer items-center justify-center gap-4 rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] transition hover:bg-[#30292b]"
               >
                 <WandSparkles /> TRY ON
               </button>
             </aside>
 
             {/* Wedding Dresses Section */}
-            <section className="bg-white xl:p-5">
+            <section className="bg-white p-5 xl:p-6">
               <h2 className="m-0 text-[1.7rem] font-semibold tracking-[0.01em]">
                 Wedding Dresses
               </h2>
-              <div className="mt-7 max-w-55">
+              <div className="mt-8 max-w-55">
                 <p className="leading-none font-bold text-[#ac8464]">
                   Silhouette
                 </p>
@@ -307,45 +307,54 @@ export default function HomePage() {
               </div>
             </section>
 
-            <section className="relative xl:py-5 bg-white">
-              <div className="min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
-                <img
-                  src={selectedDress.image}
-                  alt={selectedDress.name}
-                  className="h-160 w-full origin-[50%_38%] object-cover transition-transform duration-200"
-                  style={{ transform: `scale(${zoom})` }}
+            <section className=" bg-white xl:pt-6">
+              <div className="mb-4 flex justify-center sm:hidden">
+                <Image
+                  src={secondaryImage}
+                  alt="See yourself as a bride"
+                  className="h-auto w-44"
                 />
               </div>
+              <div className="relative mx-4 xl:mx-0">
+                <div className="min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
+                  <img
+                    src={selectedDress.image}
+                    alt={selectedDress.name}
+                    className="h-160 w-full origin-[50%_38%] object-cover transition-transform duration-200"
+                    style={{ transform: `scale(${zoom})` }}
+                  />
+                </div>
 
-              <div className="absolute right-7 top-12 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
-                <button
-                  type="button"
-                  aria-label="Zoom in"
-                  className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-                  onClick={() =>
-                    setZoom((value) =>
-                      Math.min(2.4, Number((value + 0.15).toFixed(2))),
-                    )
-                  }
-                >
-                  <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
-                </button>
-                <button
-                  type="button"
-                  aria-label="Zoom out"
-                  className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-                  onClick={() =>
-                    setZoom((value) =>
-                      Math.max(1, Number((value - 0.15).toFixed(2))),
-                    )
-                  }
-                >
-                  <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
-                </button>
+                <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
+                  <button
+                    type="button"
+                    aria-label="Zoom in"
+                    className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                    onClick={() =>
+                      setZoom((value) =>
+                        Math.min(2.4, Number((value + 0.15).toFixed(2))),
+                      )
+                    }
+                  >
+                    <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Zoom out"
+                    className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                    onClick={() =>
+                      setZoom((value) =>
+                        Math.max(1, Number((value - 0.15).toFixed(2))),
+                      )
+                    }
+                  >
+                    <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
+                  </button>
+                </div>
               </div>
             </section>
 
-            <aside className="flex flex-col justify-between gap-4 xl:p-5 bg-white">
+            <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
               <div className="grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
                 {DRESS_CARDS.slice(0, 3).map((card) => (
                   <button
@@ -373,17 +382,17 @@ export default function HomePage() {
                 <input
                   type="email"
                   placeholder="EMAIL"
-                  className="mb-2 w-full rounded-[0.3rem] border border-[#ded6d0] bg-[#f7f5f4] px-3 py-2.5 text-[#4d4642] outline-none transition placeholder:text-[#8f837b] focus:border-[#b48c6c]"
+                  className="mb-3 w-full rounded-none border border-[#ded6d0] bg-[#f7f5f4] px-3 py-2.5 text-[#4d4642] outline-none transition placeholder:text-[#8f837b] focus:border-[#b48c6c]"
                 />
                 <button
                   type="button"
-                  className="mt-1 w-full cursor-pointer border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
+                  className="mt-1 w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
                 >
                   SEND
                 </button>
                 <button
                   type="button"
-                  className="mt-2 w-full cursor-pointer border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
+                  className="mt-3 w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
                 >
                   BOOK APPOINTMENT
                 </button>
