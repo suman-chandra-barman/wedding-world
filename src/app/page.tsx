@@ -2,7 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import logo from "@/assets/logo.svg";
 import secondaryImage from "@/assets/secondary logo.png";
 import Image from "next/image";
 import {
@@ -15,6 +14,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
+import Header from "@/components/Header";
 
 type DressCard = {
   id: number;
@@ -130,38 +130,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen text-[#2b2624]">
-      <section className="bg-[#EDEAE6] px-6 py-3 text-center text-[#8d8179] sm:px-8 flex flex-col items-center sm:flex-row sm:justify-center sm:gap-2">
-        <span>Guest at the largest and </span>{"  "}
-        <span className="text-[#161215] ">
-          most beautiful out&shy;fitter in Germany.
-        </span>
-      </section>
-
-      <header className="container mx-auto flex flex-col items-stretch justify-center gap-16 rounded-[0.35rem] bg-white p-4 sm:flex-row sm:items-center sm:gap-12 sm:px-8">
-        <div className="grid justify-items-center gap-1">
-          <Image src={logo} alt="Wedding World Logo" className="h-14 w-auto" />
-        </div>
-        <nav className="flex flex-wrap justify-center gap-2 sm:justify-end">
-          <button
-            type="button"
-            className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
-          >
-            BACK TO WEDDING WORLD
-          </button>
-          <button
-            type="button"
-            className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
-          >
-            VIEW 2026 COLLECTION
-          </button>
-          <button
-            type="button"
-            className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
-          >
-            BOOK APPOINTMENT
-          </button>
-        </nav>
-      </header>
+      <Header />
 
       <section className="bg-[#EDEAE6] pb-8 px-2 py-4 sm:p-4">
         <div className="container mx-auto overflow-hidden rounded-[0.6rem] bg-[#f8f5f3]">
@@ -170,7 +139,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid min-h-160 grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)_minmax(0,1.95fr)_minmax(0,1.15fr)]">
-            {/* Sidebar with upload and info */}
+            {/* Left Sidebar - upload image */}
             <aside className="bg-[#F6F5F3] xl:p-5">
               <Image
                 src={secondaryImage}
@@ -307,6 +276,7 @@ export default function HomePage() {
               </div>
             </section>
 
+            {/* Image viewer section */}
             <section className=" bg-white xl:pt-6">
               <div className="mb-4 flex justify-center sm:hidden">
                 <Image
@@ -354,25 +324,29 @@ export default function HomePage() {
               </div>
             </section>
 
+            {/* Right sidebar section */}
             <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
-              <div className="grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
-                {DRESS_CARDS.slice(0, 3).map((card) => (
-                  <button
-                    key={`side-${card.id}`}
-                    type="button"
-                    className="grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45"
-                    onClick={() => setSelectedDressId(card.id)}
-                  >
-                    <img
-                      src={card.image}
-                      alt={card.name}
-                      className="h-19 w-14 rounded-[0.28rem] object-cover"
-                    />
-                    <span className="text-[0.9rem] text-[#3f3734]">
-                      {card.name}
-                    </span>
-                  </button>
-                ))}
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Your Try On</h2>
+                <div className="grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
+                  {DRESS_CARDS.slice(0, 3).map((card) => (
+                    <button
+                      key={`side-${card.id}`}
+                      type="button"
+                      className="grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45"
+                      onClick={() => setSelectedDressId(card.id)}
+                    >
+                      <img
+                        src={card.image}
+                        alt={card.name}
+                        className="h-19 w-14 rounded-[0.28rem] object-cover"
+                      />
+                      <span className="text-[0.9rem] text-[#3f3734]">
+                        {card.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div>
@@ -390,12 +364,12 @@ export default function HomePage() {
                 >
                   SEND
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className="mt-3 w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
                 >
                   BOOK APPOINTMENT
-                </button>
+                </button> */}
               </div>
             </aside>
           </div>
