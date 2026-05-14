@@ -16,80 +16,104 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 
-type DressCard = {
+type CategoryImage = {
   id: number;
-  name: string;
+  image_url: string;
+  uploaded_at: string;
+};
+
+type Category = {
+  category_id: number;
+  category_type: string;
+  images: CategoryImage[];
+  created_at: string;
+  updated_at: string;
+};
+
+type CategoriesPayload = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Category[];
+};
+
+type CategoriesResponse = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: CategoriesPayload;
+};
+
+type UploadPayload = {
+  id: number;
   image: string;
+  session_key: string;
+  uploaded_at: string;
 };
 
-type SilhouetteOption = {
-  label: string;
-  dressId: number;
+type UploadResponse = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: UploadPayload;
 };
 
-const DRESS_CARDS: DressCard[] = [
-  {
-    id: 1,
-    name: "Wedding Dress 1",
-    image:
-      "https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=720&q=80",
-  },
-  {
-    id: 2,
-    name: "Wedding Dress 2",
-    image:
-      "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=720&q=80",
-  },
-  {
-    id: 3,
-    name: "Wedding Dress 3",
-    image:
-      "https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg?auto=compress&cs=tinysrgb&w=720",
-  },
-  {
-    id: 4,
-    name: "Wedding Dress 4",
-    image:
-      "https://images.unsplash.com/photo-1585241936939-be4099591252?auto=format&fit=crop&w=720&q=80",
-  },
-  {
-    id: 5,
-    name: "Wedding Dress 5",
-    image:
-      "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=720&q=80",
-  },
-  {
-    id: 6,
-    name: "Wedding Dress 6",
-    image:
-      "https://images.unsplash.com/photo-1525328437458-0c4d4db7cab4?auto=format&fit=crop&w=720&q=80",
-  },
-];
+type TryOnResponse = {
+  id: number;
+  generated_image: string;
+  created_at: string;
+  session_key: string;
+};
 
-const SILHOUETTE_OPTIONS: SilhouetteOption[] = [
-  { label: "A-Line", dressId: 1 },
-  { label: "Mermaid", dressId: 2 },
-  { label: "Fit & Flare", dressId: 3 },
-  { label: "Straight / Column", dressId: 4 },
-  { label: "Princess", dressId: 5 },
-];
+type TryOnItem = {
+  id: number;
+  generatedImage: string;
+  createdAt: string;
+  sessionKey: string;
+};
 
 export default function HomePage() {
-  const [selectedDressId, setSelectedDressId] = useState<number>(
-    DRESS_CARDS[0].id,
-  );
-  const [selectedSilhouette, setSelectedSilhouette] = useState<string>(
-    SILHOUETTE_OPTIONS[0].label,
-  );
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";
+  const apiUrl = (path: string) =>
+    `${backendUrl.replace(/\/$/, "")}${path.startsWith("/") ? "" : "/"}${path}`;
   const [zoom, setZoom] = useState<number>(1);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null,
+  );
+  const [selectedDressImageId, setSelectedDressImageId] = useState<
+    number | null
+  >(null);
+  const [selectedDressImageUrl, setSelectedDressImageUrl] = useState<
+    string | null
+  >(null);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
+    null,
+  );
+  const [tryOnHistory, setTryOnHistory] = useState<TryOnItem[]>([]);
+  const [selectedTryOnIds, setSelectedTryOnIds] = useState<Set<number>>(
+    () => new Set(),
+  );
+  const [email, setEmail] = useState<string>("");
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "uploading" | "success" | "error"
+  >("idle");
+  const [tryOnStatus, setTryOnStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [sendStatus, setSendStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [sessionKey, setSessionKey] = useState<string | null>(null);
+  const [userImageId, setUserImageId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const selectedDress = useMemo(
-    () =>
-      DRESS_CARDS.find((item) => item.id === selectedDressId) ?? DRESS_CARDS[0],
-    [selectedDressId],
-  );
+  const selectedCategory = useMemo(() => {
+    const list = Array.isArray(categories) ? categories : [];
+    return list.find((item) => item.category_id === selectedCategoryId);
+  }, [categories, selectedCategoryId]);
 
   const openFilePicker = () => {
     fileInputRef.current?.click();
@@ -103,7 +127,34 @@ export default function HomePage() {
     };
   }, [uploadedImage]);
 
-  const onUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const response = await fetch(apiUrl("/api/categories/"));
+        if (!response.ok) {
+          throw new Error("Failed to load categories.");
+        }
+        const data = (await response.json()) as CategoriesResponse;
+        const list = data.data?.results ?? [];
+        setCategories(list);
+        const firstCategory = list[0] ?? null;
+        if (firstCategory) {
+          setSelectedCategoryId(firstCategory.category_id);
+          const firstImage = firstCategory.images[0] ?? null;
+          if (firstImage) {
+            setSelectedDressImageId(firstImage.id);
+            setSelectedDressImageUrl(firstImage.image_url);
+          }
+        }
+      } catch (error) {
+        setPopupMessage("Unable to load categories. Please try again.");
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
       return;
@@ -115,6 +166,27 @@ export default function HomePage() {
 
     const nextImage = URL.createObjectURL(file);
     setUploadedImage(nextImage);
+    setUploadStatus("uploading");
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await fetch(apiUrl("/api/user/upload/"), {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error("Upload failed.");
+      }
+      const data = (await response.json()) as UploadResponse | UploadPayload;
+      const payload = "data" in data ? data.data : data;
+      setSessionKey(payload.session_key);
+      setUserImageId(payload.id);
+      setUploadStatus("success");
+    } catch (error) {
+      setUploadStatus("error");
+      setPopupMessage("Upload failed. Please try again.");
+    }
   };
 
   const removePhoto = () => {
@@ -122,10 +194,125 @@ export default function HomePage() {
       URL.revokeObjectURL(uploadedImage);
     }
     setUploadedImage(null);
+    setSessionKey(null);
+    setUserImageId(null);
+    setUploadStatus("idle");
   };
 
-  const onSelectSilhouette = (option: SilhouetteOption) => {
-    setSelectedSilhouette(option.label);
+  const onSelectCategory = (category: Category) => {
+    setSelectedCategoryId(category.category_id);
+    const firstImage = category.images[0] ?? null;
+    if (firstImage) {
+      setSelectedDressImageId(firstImage.id);
+      setSelectedDressImageUrl(firstImage.image_url);
+    } else {
+      setSelectedDressImageId(null);
+      setSelectedDressImageUrl(null);
+    }
+  };
+
+  const onSelectDressImage = (image: CategoryImage) => {
+    setSelectedDressImageId(image.id);
+    setSelectedDressImageUrl(image.image_url);
+  };
+
+  const toggleTryOnSelection = (id: number) => {
+    setSelectedTryOnIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const onTryOn = async () => {
+    if (!userImageId || !sessionKey) {
+      setPopupMessage("Please upload your photo first.");
+      return;
+    }
+
+    if (!selectedDressImageId) {
+      setPopupMessage("Please select a dress image first.");
+      return;
+    }
+
+    setTryOnStatus("loading");
+
+    try {
+      const response = await fetch(apiUrl("/api/try-on/"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          session_key: sessionKey,
+          user_image_id: userImageId,
+          dress_image_id: selectedDressImageId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Try on failed.");
+      }
+
+      const data = (await response.json()) as TryOnResponse;
+      const nextItem: TryOnItem = {
+        id: data.id,
+        generatedImage: data.generated_image,
+        createdAt: data.created_at,
+        sessionKey: data.session_key,
+      };
+
+      setGeneratedImageUrl(data.generated_image);
+      setTryOnHistory((prev) => [nextItem, ...prev]);
+      setTryOnStatus("success");
+    } catch (error) {
+      setTryOnStatus("error");
+      setPopupMessage("Try on failed. Please try again.");
+    }
+  };
+
+  const onSendEmail = async () => {
+    if (!email.trim()) {
+      setPopupMessage("Please enter your email first.");
+      return;
+    }
+
+    if (selectedTryOnIds.size === 0) {
+      setPopupMessage(
+        "Please select at least one image from your try on list.",
+      );
+      return;
+    }
+
+    setSendStatus("sending");
+
+    try {
+      const response = await fetch(apiUrl("/api/user/send-email/"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          generated_image_ids: Array.from(selectedTryOnIds),
+          email: email.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Send failed.");
+      }
+
+      setSendStatus("success");
+      setPopupMessage("Images sent successfully.");
+      setSelectedTryOnIds(new Set());
+    } catch (error) {
+      setSendStatus("error");
+      setPopupMessage("Unable to send images. Please try again.");
+    }
   };
 
   return (
@@ -211,10 +398,18 @@ export default function HomePage() {
 
               <button
                 type="button"
-                className="mt-5 flex w-full cursor-pointer items-center justify-center gap-4 rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] transition hover:bg-[#30292b]"
+                className="mt-5 flex w-full cursor-pointer items-center justify-center gap-4 rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70"
+                onClick={onTryOn}
+                disabled={tryOnStatus === "loading"}
               >
-                <WandSparkles /> TRY ON
+                <WandSparkles />
+                {tryOnStatus === "loading" ? "GENERATING..." : "TRY ON"}
               </button>
+              {uploadStatus === "uploading" && (
+                <p className="mt-3 text-xs tracking-[0.08em] text-[#8d8179]">
+                  Uploading...
+                </p>
+              )}
             </aside>
 
             {/* Wedding Dresses Section */}
@@ -224,28 +419,32 @@ export default function HomePage() {
               </h2>
               <div className="mt-8 max-w-55">
                 <p className="leading-none font-bold text-[#ac8464]">
-                  Silhouette
+                  Categories
                 </p>
 
                 <ul className="m-0 mt-4 list-none p-0 space-y-4">
-                  {SILHOUETTE_OPTIONS.map((option) => (
-                    <li key={option.label}>
-                      {selectedSilhouette === option.label ? (
+                  {categories?.map((category) => (
+                    <li key={category.category_id}>
+                      {selectedCategoryId === category.category_id ? (
                         <button
                           type="button"
                           className="flex w-full items-center justify-start gap-2 border-0 bg-transparent p-0 text-left font-semibold text-[#ac8464] transition"
-                          onClick={() => onSelectSilhouette(option)}
+                          onClick={() => onSelectCategory(category)}
                         >
-                          <span className="leading-[1.05]">{option.label}</span>
+                          <span className="leading-[1.05]">
+                            {category.category_type}
+                          </span>
                           <ChevronDown className="h-4 w-4" />
                         </button>
                       ) : (
                         <button
                           type="button"
                           className="flex w-full items-center justify-between border-0 bg-transparent p-0 text-left font-medium text-[#1f1a1b] transition hover:text-[#6f5540]"
-                          onClick={() => onSelectSilhouette(option)}
+                          onClick={() => onSelectCategory(category)}
                         >
-                          <span className="leading-[1.05]">{option.label}</span>
+                          <span className="leading-[1.05]">
+                            {category.category_type}
+                          </span>
                           <ChevronRight className="h-4 w-4 text-[#ac8464]" />
                         </button>
                       )}
@@ -255,24 +454,29 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 grid grid-cols-3 gap-2">
-                {DRESS_CARDS.map((card) => (
+                {(selectedCategory?.images ?? []).map((image) => (
                   <button
-                    key={card.id}
+                    key={image.id}
                     type="button"
-                    className={`overflow-hidden rounded-[0.42rem] border bg-transparent p-0 transition ${
-                      card.id === selectedDressId
+                    className={`overflow-hidden rounded-[0.42rem] border-2 bg-transparent p-0 transition ${
+                      image.id === selectedDressImageId
                         ? "border-[#b48c6c]"
                         : "border-transparent hover:border-[#d7c1af]"
                     }`}
-                    onClick={() => setSelectedDressId(card.id)}
+                    onClick={() => onSelectDressImage(image)}
                   >
                     <img
-                      src={card.image}
-                      alt={card.name}
+                      src={image.image_url}
+                      alt={`Dress ${image.id}`}
                       className="aspect-3/4 w-full object-cover"
                     />
                   </button>
                 ))}
+                {!selectedCategory?.images.length && (
+                  <div className="col-span-3 rounded-md border border-dashed border-[#e3d8cf] bg-[#f7f5f4] px-4 py-6 text-center text-sm text-[#8d8179]">
+                    No dress images in this category yet.
+                  </div>
+                )}
               </div>
             </section>
 
@@ -287,12 +491,18 @@ export default function HomePage() {
               </div>
               <div className="relative mx-4 xl:mx-0">
                 <div className="min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
-                  <img
-                    src={selectedDress.image}
-                    alt={selectedDress.name}
-                    className="h-160 w-full origin-[50%_38%] object-cover transition-transform duration-200"
-                    style={{ transform: `scale(${zoom})` }}
-                  />
+                  {generatedImageUrl || selectedDressImageUrl ? (
+                    <img
+                      src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
+                      alt="Generated preview"
+                      className="h-160 w-full origin-[50%_38%] object-cover transition-transform duration-200"
+                      style={{ transform: `scale(${zoom})` }}
+                    />
+                  ) : (
+                    <div className="flex h-160 items-center justify-center bg-[#f6f2ee] text-sm text-[#8d8179]">
+                      Upload your photo and select a dress to generate.
+                    </div>
+                  )}
                 </div>
 
                 <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
@@ -329,23 +539,40 @@ export default function HomePage() {
               <div>
                 <h2 className="text-xl font-semibold mb-4">Your Try On</h2>
                 <div className="grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
-                  {DRESS_CARDS.slice(0, 3).map((card) => (
-                    <button
-                      key={`side-${card.id}`}
-                      type="button"
-                      className="grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45"
-                      onClick={() => setSelectedDressId(card.id)}
-                    >
-                      <img
-                        src={card.image}
-                        alt={card.name}
-                        className="h-19 w-14 rounded-[0.28rem] object-cover"
-                      />
-                      <span className="text-[0.9rem] text-[#3f3734]">
-                        {card.name}
-                      </span>
-                    </button>
-                  ))}
+                  {tryOnHistory.length === 0 ? (
+                    <div className="rounded-md bg-white/60 px-3 py-4 text-sm text-[#8d8179]">
+                      Your generated try-on images will appear here.
+                    </div>
+                  ) : (
+                    tryOnHistory.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
+                          selectedTryOnIds.has(item.id) ? "bg-white/80" : ""
+                        }`}
+                        onClick={() => toggleTryOnSelection(item.id)}
+                      >
+                        <img
+                          src={item.generatedImage}
+                          alt={`Try on ${item.id}`}
+                          className="h-19 w-14 rounded-[0.28rem] object-cover"
+                        />
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[0.9rem] text-[#3f3734]">
+                            Generated {item.id}
+                          </span>
+                          <span
+                            className={`h-3.5 w-3.5 rounded-sm border border-[#b48c6c] ${
+                              selectedTryOnIds.has(item.id)
+                                ? "bg-[#b48c6c]"
+                                : "bg-transparent"
+                            }`}
+                          />
+                        </div>
+                      </button>
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -357,12 +584,16 @@ export default function HomePage() {
                   type="email"
                   placeholder="EMAIL"
                   className="mb-3 w-full rounded-none border border-[#ded6d0] bg-[#f7f5f4] px-3 py-2.5 text-[#4d4642] outline-none transition placeholder:text-[#8f837b] focus:border-[#b48c6c]"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                 />
                 <button
                   type="button"
-                  className="mt-1 w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
+                  className="mt-1 w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70"
+                  onClick={onSendEmail}
+                  disabled={sendStatus === "sending"}
                 >
-                  SEND
+                  {sendStatus === "sending" ? "SENDING..." : "SEND"}
                 </button>
                 {/* <button
                   type="button"
@@ -375,6 +606,20 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {popupMessage && (
+        <div className="fixed inset-0 z-40 grid place-items-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-md bg-white p-5 text-center shadow-xl">
+            <p className="text-sm text-[#3f3734]">{popupMessage}</p>
+            <button
+              type="button"
+              className="mt-4 w-full rounded-none border-0 bg-[#1f1a1b] px-4 py-2.5 text-[0.75rem] tracking-[0.06em] text-white transition hover:bg-[#30292b]"
+              onClick={() => setPopupMessage(null)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
