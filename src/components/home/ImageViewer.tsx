@@ -2,24 +2,21 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Image from "next/image";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { ZoomIn, ZoomOut } from "lucide-react";
 import secondaryImage from "@/assets/secondary logo.png";
 
 type ImageViewerProps = {
   generatedImageUrl: string | null;
   selectedDressImageUrl: string | null;
-  zoom: number;
-  onZoomIn: () => void;
-  onZoomOut: () => void;
 };
 
 export default function ImageViewer({
   generatedImageUrl,
   selectedDressImageUrl,
-  zoom,
-  onZoomIn,
-  onZoomOut,
 }: ImageViewerProps) {
+  const viewerKey = generatedImageUrl ?? selectedDressImageUrl ?? "empty";
+
   return (
     <section className=" bg-white xl:pt-6">
       <div className="mb-4 flex justify-center sm:hidden">
@@ -32,36 +29,58 @@ export default function ImageViewer({
       <div className="relative mx-4 xl:mx-0">
         <div className="min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
           {generatedImageUrl || selectedDressImageUrl ? (
-            <img
-              src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
-              alt="Generated preview"
-              className="h-160 w-full origin-[50%_38%] object-cover transition-transform duration-200"
-              style={{ transform: `scale(${zoom})` }}
-            />
+            <TransformWrapper
+              key={viewerKey}
+              minScale={1}
+              maxScale={2.4}
+              initialScale={1}
+              centerOnInit
+              doubleClick={{ disabled: true }}
+              wheel={{ disabled: true }}
+              panning={{ velocityDisabled: true }}
+              pinch={{ disabled: false }}
+              limitToBounds
+            >
+              {({ zoomIn, zoomOut }) => (
+                <>
+                  <TransformComponent
+                    wrapperClass="h-160 w-full"
+                    contentClass="h-160 w-full"
+                  >
+                    <img
+                      src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
+                      alt="Generated preview"
+                      draggable={false}
+                      className="h-160 w-full select-none object-cover"
+                    />
+                  </TransformComponent>
+
+                  <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
+                    <button
+                      type="button"
+                      aria-label="Zoom in"
+                      className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                      onClick={() => zoomIn()}
+                    >
+                      <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Zoom out"
+                      className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                      onClick={() => zoomOut()}
+                    >
+                      <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
+                    </button>
+                  </div>
+                </>
+              )}
+            </TransformWrapper>
           ) : (
             <div className="flex h-160 items-center justify-center bg-[#f6f2ee] text-sm text-[#8d8179]">
               Upload your photo and select a dress to generate.
             </div>
           )}
-        </div>
-
-        <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
-          <button
-            type="button"
-            aria-label="Zoom in"
-            className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-            onClick={onZoomIn}
-          >
-            <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
-          </button>
-          <button
-            type="button"
-            aria-label="Zoom out"
-            className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-            onClick={onZoomOut}
-          >
-            <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
-          </button>
         </div>
       </div>
     </section>

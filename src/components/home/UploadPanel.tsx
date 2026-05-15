@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import secondaryImage from "@/assets/secondary logo.png";
 import type { TryOnStatus, UploadStatus } from "./types";
+import ImageUploadSkeleton from "../skeleton/ImageUploadSkeleton";
 
 type UploadPanelProps = {
   uploadedImage: string | null;
@@ -103,6 +104,9 @@ export default function UploadPanel({
             </div>
           </>
         )}
+        {uploadStatus === "uploading" && (
+          <ImageUploadSkeleton />
+        )}
       </div>
 
       <button
@@ -114,11 +118,6 @@ export default function UploadPanel({
         <WandSparkles />
         {tryOnStatus === "loading" ? "GENERATING..." : "TRY ON"}
       </button>
-      {uploadStatus === "uploading" && (
-        <p className="mt-3 text-xs tracking-[0.08em] text-[#8d8179]">
-          Uploading...
-        </p>
-      )}
     </aside>
   );
 }

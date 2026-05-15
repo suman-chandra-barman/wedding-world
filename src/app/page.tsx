@@ -23,7 +23,6 @@ export default function HomePage() {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";
   const apiUrl = (path: string) =>
     `${backendUrl.replace(/\/$/, "")}${path.startsWith("/") ? "" : "/"}${path}`;
-  const [zoom, setZoom] = useState<number>(1);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
@@ -63,6 +62,7 @@ export default function HomePage() {
     };
   }, [uploadedImage]);
 
+  // Load categories on mount
   useEffect(() => {
     const loadCategories = async () => {
       try {
@@ -90,6 +90,7 @@ export default function HomePage() {
     loadCategories();
   }, []);
 
+  // Upload photo handler
   const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -125,6 +126,7 @@ export default function HomePage() {
     }
   };
 
+  // Remove photo handler
   const removePhoto = () => {
     if (uploadedImage) {
       URL.revokeObjectURL(uploadedImage);
@@ -195,15 +197,20 @@ export default function HomePage() {
         throw new Error("Try on failed.");
       }
 
-      const data = (await response.json()) as TryOnResponse;
+      const data = (await response.json()) as
+        | TryOnResponse
+        | {
+            data: TryOnResponse;
+          };
+      const payload = "data" in data ? data.data : data;
       const nextItem: TryOnItem = {
-        id: data.id,
-        generatedImage: data.generated_image,
-        createdAt: data.created_at,
-        sessionKey: data.session_key,
+        id: payload.id,
+        generatedImage: payload.generated_image,
+        createdAt: payload.created_at,
+        sessionKey: payload.session_key,
       };
 
-      setGeneratedImageUrl(data.generated_image);
+      setGeneratedImageUrl(payload.generated_image);
       setTryOnHistory((prev) => [nextItem, ...prev]);
       setTryOnStatus("success");
     } catch (error) {
@@ -212,6 +219,7 @@ export default function HomePage() {
     }
   };
 
+  // Send Email handler
   const onSendEmail = async () => {
     if (!email.trim()) {
       setPopupMessage("Please enter your email first.");
@@ -284,17 +292,6 @@ export default function HomePage() {
             <ImageViewer
               generatedImageUrl={generatedImageUrl}
               selectedDressImageUrl={selectedDressImageUrl}
-              zoom={zoom}
-              onZoomIn={() =>
-                setZoom((value) =>
-                  Math.min(2.4, Number((value + 0.15).toFixed(2))),
-                )
-              }
-              onZoomOut={() =>
-                setZoom((value) =>
-                  Math.max(1, Number((value - 0.15).toFixed(2))),
-                )
-              }
             />
 
             <TryOnSidebar
