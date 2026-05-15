@@ -29,6 +29,8 @@ export default function HomePage() {
   );
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] =
+    useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null,
   );
@@ -152,6 +154,7 @@ export default function HomePage() {
   // Load categories on mount
   useEffect(() => {
     const loadCategories = async () => {
+      setIsCategoriesLoading(true);
       try {
         const response = await fetch(apiUrl("/api/categories/"));
         if (!response.ok) {
@@ -171,6 +174,8 @@ export default function HomePage() {
         }
       } catch (error) {
         setPopupMessage("Unable to load categories. Please try again.");
+      } finally {
+        setIsCategoriesLoading(false);
       }
     };
 
@@ -375,6 +380,7 @@ export default function HomePage() {
               selectedCategoryId={selectedCategoryId}
               selectedCategory={selectedCategory}
               selectedDressImageId={selectedDressImageId}
+              isLoading={isCategoriesLoading}
               onSelectCategory={onSelectCategory}
               onSelectDressImage={onSelectDressImage}
             />
