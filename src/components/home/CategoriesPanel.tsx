@@ -81,7 +81,7 @@ export default function CategoriesPanel({
         ))}
         {!selectedCategory?.images.length && (
           <div className="col-span-3 rounded-md border border-dashed border-[#e3d8cf] bg-[#f7f5f4] px-4 py-6 text-center text-sm text-[#8d8179]">
-            No dress images in this category yet.
+            No dress in this category yet.
           </div>
         )}
       </div>

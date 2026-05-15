@@ -11,10 +11,10 @@ import type {
   Category,
   CategoryImage,
   SendStatus,
+  TryOnHistoryResponse,
   TryOnItem,
   TryOnResponse,
   TryOnStatus,
-  UserUpload,
   UploadPayload,
   UploadResponse,
   UploadStatus,
@@ -42,6 +42,8 @@ export default function HomePage() {
     null,
   );
   const [tryOnHistory, setTryOnHistory] = useState<TryOnItem[]>([]);
+  const [isTryOnHistoryLoading, setIsTryOnHistoryLoading] =
+    useState<boolean>(false);
   const [selectedTryOnIds, setSelectedTryOnIds] = useState<Set<number>>(
     () => new Set(),
   );
@@ -53,7 +55,24 @@ export default function HomePage() {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const [sessionKey, setSessionKey] = useState<string | null>(null);
   const [userImageId, setUserImageId] = useState<number | null>(null);
-  const defaultSessionKey = "0f983f55-af86-4204-922d-7dca4d771a28";
+  const sessionStorageKey = "ww_session_key";
+
+  const getStoredSessionKey = useCallback(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    return window.localStorage.getItem(sessionStorageKey);
+  }, [sessionStorageKey]);
+
+  const storeSessionKey = useCallback(
+    (key: string) => {
+      if (typeof window === "undefined") {
+        return;
+      }
+      window.localStorage.setItem(sessionStorageKey, key);
+    },
+    [sessionStorageKey],
+  );
 
   const selectedCategory = useMemo(() => {
     const list = Array.isArray(categories) ? categories : [];
@@ -69,34 +88,32 @@ export default function HomePage() {
   }, [uploadedImage]);
 
   useEffect(() => {
-    const effectiveSessionKey = sessionKey ?? defaultSessionKey;
-    if (!effectiveSessionKey) {
-      setTryOnHistory([]);
-      setSelectedTryOnIds(new Set());
-      setActiveTryOnId(null);
+    const storedSessionKey = getStoredSessionKey();
+    if (!storedSessionKey || tryOnHistory.length > 0) {
       return;
     }
 
     let isActive = true;
-    const loadUserUploads = async () => {
+    const loadTryOnHistory = async () => {
+      setIsTryOnHistoryLoading(true);
       try {
         const response = await fetch(
           apiUrl(
-            `/api/user/upload/?session_key=${encodeURIComponent(effectiveSessionKey)}`,
+            `/api/try-on/?session_key=${encodeURIComponent(storedSessionKey)}`,
           ),
         );
         if (!response.ok) {
-          throw new Error("Failed to load uploads.");
+          throw new Error("Failed to load try-on history.");
         }
-        const data = (await response.json()) as UserUpload[];
+        const data = (await response.json()) as TryOnHistoryResponse[];
         if (!isActive) {
           return;
         }
         const list = Array.isArray(data) ? data : [];
         const mapped: TryOnItem[] = list.map((item) => ({
           id: item.id,
-          generatedImage: item.image_url ?? item.image,
-          createdAt: item.uploaded_at,
+          generatedImage: item.generated_image,
+          createdAt: item.created_at,
           sessionKey: item.session_key,
         }));
         setTryOnHistory(mapped);
@@ -109,14 +126,28 @@ export default function HomePage() {
         if (isActive) {
           setPopupMessage("Unable to load your images. Please try again.");
         }
+      } finally {
+        if (isActive) {
+          setIsTryOnHistoryLoading(false);
+        }
       }
     };
 
-    loadUserUploads();
+    loadTryOnHistory();
     return () => {
       isActive = false;
     };
-  }, [apiUrl, defaultSessionKey, sessionKey]);
+  }, [apiUrl, getStoredSessionKey, tryOnHistory.length]);
+
+  useEffect(() => {
+    const effectiveSessionKey = sessionKey ?? getStoredSessionKey();
+    if (!effectiveSessionKey) {
+      setTryOnHistory([]);
+      setSelectedTryOnIds(new Set());
+      setActiveTryOnId(null);
+      setIsTryOnHistoryLoading(false);
+    }
+  }, [getStoredSessionKey, sessionKey]);
 
   // Load categories on mount
   useEffect(() => {
@@ -164,6 +195,7 @@ export default function HomePage() {
     try {
       const formData = new FormData();
       formData.append("image", file);
+      formData.append("session_key", getStoredSessionKey() ?? "");
       const response = await fetch(apiUrl("/api/user/upload/"), {
         method: "POST",
         body: formData,
@@ -174,6 +206,7 @@ export default function HomePage() {
       const data = (await response.json()) as UploadResponse | UploadPayload;
       const payload = "data" in data ? data.data : data;
       setSessionKey(payload.session_key);
+      storeSessionKey(payload.session_key);
       setUserImageId(payload.id);
       setUploadStatus("success");
     } catch (error) {
@@ -355,6 +388,7 @@ export default function HomePage() {
               tryOnHistory={tryOnHistory}
               selectedTryOnIds={selectedTryOnIds}
               activeTryOnId={activeTryOnId}
+              isLoading={isTryOnHistoryLoading}
               onToggleTryOn={toggleTryOnSelection}
               onPreviewTryOn={(item) => {
                 setGeneratedImageUrl(item.generatedImage);

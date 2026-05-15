@@ -3,11 +3,13 @@
 
 import { ChangeEvent } from "react";
 import type { SendStatus, TryOnItem } from "./types";
+import TryOnSidebarSkeleton from "../skeleton/TryOnSidebarSkeleton";
 
 type TryOnSidebarProps = {
   tryOnHistory: TryOnItem[];
   selectedTryOnIds: Set<number>;
   activeTryOnId: number | null;
+  isLoading: boolean;
   onToggleTryOn: (id: number) => void;
   onPreviewTryOn: (item: TryOnItem) => void;
   email: string;
@@ -20,6 +22,7 @@ export default function TryOnSidebar({
   tryOnHistory,
   selectedTryOnIds,
   activeTryOnId,
+  isLoading,
   onToggleTryOn,
   onPreviewTryOn,
   email,
@@ -32,7 +35,9 @@ export default function TryOnSidebar({
       <div>
         <h2 className="text-xl font-semibold mb-4">Your Try On</h2>
         <div className="overflow-y-auto max-h-100 grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
-          {tryOnHistory.length === 0 ? (
+          {isLoading ? (
+            <TryOnSidebarSkeleton />
+          ) : tryOnHistory.length === 0 ? (
             <div className="rounded-md bg-white/60 px-3 py-4 text-sm text-[#8d8179]">
               Your generated try-on images will appear here.
             </div>

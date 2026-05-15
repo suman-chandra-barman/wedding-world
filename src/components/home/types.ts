@@ -55,6 +55,14 @@ export type TryOnResponse = {
   session_key: string;
 };
 
+export type TryOnHistoryResponse = {
+  id: number;
+  generated_image: string;
+  created_at: string;
+  session_key: string;
+  email_sent_to: string | null;
+};
+
 export type TryOnItem = {
   id: number;
   generatedImage: string;
