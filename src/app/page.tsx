@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import UploadPanel from "@/components/home/UploadPanel";
 import CategoriesPanel from "@/components/home/CategoriesPanel";
@@ -14,6 +14,7 @@ import type {
   TryOnItem,
   TryOnResponse,
   TryOnStatus,
+  UserUpload,
   UploadPayload,
   UploadResponse,
   UploadStatus,
@@ -21,8 +22,11 @@ import type {
 
 export default function HomePage() {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";
-  const apiUrl = (path: string) =>
-    `${backendUrl.replace(/\/$/, "")}${path.startsWith("/") ? "" : "/"}${path}`;
+  const apiUrl = useCallback(
+    (path: string) =>
+      `${backendUrl.replace(/\/$/, "")}${path.startsWith("/") ? "" : "/"}${path}`,
+    [backendUrl],
+  );
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
@@ -41,6 +45,7 @@ export default function HomePage() {
   const [selectedTryOnIds, setSelectedTryOnIds] = useState<Set<number>>(
     () => new Set(),
   );
+  const [activeTryOnId, setActiveTryOnId] = useState<number | null>(null);
   const [email, setEmail] = useState<string>("");
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [tryOnStatus, setTryOnStatus] = useState<TryOnStatus>("idle");
@@ -61,6 +66,55 @@ export default function HomePage() {
       }
     };
   }, [uploadedImage]);
+
+  useEffect(() => {
+    if (!sessionKey) {
+      setTryOnHistory([]);
+      setSelectedTryOnIds(new Set());
+      setActiveTryOnId(null);
+      return;
+    }
+
+    let isActive = true;
+    const loadUserUploads = async () => {
+      try {
+        const response = await fetch(
+          apiUrl(
+            `/api/user/upload/?session_key=${encodeURIComponent(sessionKey)}`,
+          ),
+        );
+        if (!response.ok) {
+          throw new Error("Failed to load uploads.");
+        }
+        const data = (await response.json()) as UserUpload[];
+        if (!isActive) {
+          return;
+        }
+        const list = Array.isArray(data) ? data : [];
+        const mapped: TryOnItem[] = list.map((item) => ({
+          id: item.id,
+          generatedImage: item.image_url ?? item.image,
+          createdAt: item.uploaded_at,
+          sessionKey: item.session_key,
+        }));
+        setTryOnHistory(mapped);
+        setSelectedTryOnIds(new Set());
+        if (mapped[0]) {
+          setGeneratedImageUrl(mapped[0].generatedImage);
+          setActiveTryOnId(mapped[0].id);
+        }
+      } catch (error) {
+        if (isActive) {
+          setPopupMessage("Unable to load your images. Please try again.");
+        }
+      }
+    };
+
+    loadUserUploads();
+    return () => {
+      isActive = false;
+    };
+  }, [apiUrl, sessionKey]);
 
   // Load categories on mount
   useEffect(() => {
@@ -211,6 +265,7 @@ export default function HomePage() {
       };
 
       setGeneratedImageUrl(payload.generated_image);
+      setActiveTryOnId(payload.id);
       setTryOnHistory((prev) => [nextItem, ...prev]);
       setTryOnStatus("success");
     } catch (error) {
@@ -297,7 +352,12 @@ export default function HomePage() {
             <TryOnSidebar
               tryOnHistory={tryOnHistory}
               selectedTryOnIds={selectedTryOnIds}
+              activeTryOnId={activeTryOnId}
               onToggleTryOn={toggleTryOnSelection}
+              onPreviewTryOn={(item) => {
+                setGeneratedImageUrl(item.generatedImage);
+                setActiveTryOnId(item.id);
+              }}
               email={email}
               onEmailChange={(event) => setEmail(event.target.value)}
               sendStatus={sendStatus}

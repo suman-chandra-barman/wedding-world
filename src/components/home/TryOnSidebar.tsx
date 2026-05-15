@@ -7,7 +7,9 @@ import type { SendStatus, TryOnItem } from "./types";
 type TryOnSidebarProps = {
   tryOnHistory: TryOnItem[];
   selectedTryOnIds: Set<number>;
+  activeTryOnId: number | null;
   onToggleTryOn: (id: number) => void;
+  onPreviewTryOn: (item: TryOnItem) => void;
   email: string;
   onEmailChange: (event: ChangeEvent<HTMLInputElement>) => void;
   sendStatus: SendStatus;
@@ -17,7 +19,9 @@ type TryOnSidebarProps = {
 export default function TryOnSidebar({
   tryOnHistory,
   selectedTryOnIds,
+  activeTryOnId,
   onToggleTryOn,
+  onPreviewTryOn,
   email,
   onEmailChange,
   sendStatus,
@@ -33,34 +37,39 @@ export default function TryOnSidebar({
               Your generated try-on images will appear here.
             </div>
           ) : (
-            tryOnHistory.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
-                  selectedTryOnIds.has(item.id) ? "bg-white/80" : ""
-                }`}
-                onClick={() => onToggleTryOn(item.id)}
-              >
-                <img
-                  src={item.generatedImage}
-                  alt={`Try on ${item.id}`}
-                  className="h-19 w-14 rounded-[0.28rem] object-cover"
-                />
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-[0.9rem] text-[#3f3734]">
-                    Generated {item.id}
-                  </span>
-                  <span
-                    className={`h-3.5 w-3.5 rounded-sm border border-[#b48c6c] ${
-                      selectedTryOnIds.has(item.id)
-                        ? "bg-[#b48c6c]"
-                        : "bg-transparent"
-                    }`}
+            tryOnHistory.map((item) => {
+              const isSelected = selectedTryOnIds.has(item.id);
+              const isActive = activeTryOnId === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
+                    isActive || isSelected ? "bg-white/80" : ""
+                  }`}
+                  onClick={() => onPreviewTryOn(item)}
+                >
+                  <img
+                    src={item.generatedImage}
+                    alt={`Try on ${item.id}`}
+                    className="h-19 w-14 rounded-[0.28rem] object-cover"
                   />
-                </div>
-              </button>
-            ))
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[0.9rem] text-[#3f3734]">
+                      Generated {item.id}
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => onToggleTryOn(item.id)}
+                      onClick={(event) => event.stopPropagation()}
+                      className="h-3.5 w-3.5 cursor-pointer rounded-sm border border-[#b48c6c] text-[#b48c6c] accent-[#b48c6c]"
+                      aria-label={`Select try on ${item.id}`}
+                    />
+                  </div>
+                </button>
+              );
+            })
           )}
         </div>
       </div>

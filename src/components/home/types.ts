@@ -33,6 +33,14 @@ export type UploadPayload = {
   uploaded_at: string;
 };
 
+export type UserUpload = {
+  id: number;
+  image: string;
+  image_url?: string;
+  session_key: string;
+  uploaded_at: string;
+};
+
 export type UploadResponse = {
   success: boolean;
   statusCode: number;
