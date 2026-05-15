@@ -31,7 +31,7 @@ export default function TryOnSidebar({
     <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
       <div>
         <h2 className="text-xl font-semibold mb-4">Your Try On</h2>
-        <div className="grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
+        <div className="overflow-y-auto max-h-100 grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
           {tryOnHistory.length === 0 ? (
             <div className="rounded-md bg-white/60 px-3 py-4 text-sm text-[#8d8179]">
               Your generated try-on images will appear here.

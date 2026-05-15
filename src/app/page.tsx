@@ -53,6 +53,7 @@ export default function HomePage() {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const [sessionKey, setSessionKey] = useState<string | null>(null);
   const [userImageId, setUserImageId] = useState<number | null>(null);
+  const defaultSessionKey = "0f983f55-af86-4204-922d-7dca4d771a28";
 
   const selectedCategory = useMemo(() => {
     const list = Array.isArray(categories) ? categories : [];
@@ -68,7 +69,8 @@ export default function HomePage() {
   }, [uploadedImage]);
 
   useEffect(() => {
-    if (!sessionKey) {
+    const effectiveSessionKey = sessionKey ?? defaultSessionKey;
+    if (!effectiveSessionKey) {
       setTryOnHistory([]);
       setSelectedTryOnIds(new Set());
       setActiveTryOnId(null);
@@ -80,7 +82,7 @@ export default function HomePage() {
       try {
         const response = await fetch(
           apiUrl(
-            `/api/user/upload/?session_key=${encodeURIComponent(sessionKey)}`,
+            `/api/user/upload/?session_key=${encodeURIComponent(effectiveSessionKey)}`,
           ),
         );
         if (!response.ok) {
@@ -114,7 +116,7 @@ export default function HomePage() {
     return () => {
       isActive = false;
     };
-  }, [apiUrl, sessionKey]);
+  }, [apiUrl, defaultSessionKey, sessionKey]);
 
   // Load categories on mount
   useEffect(() => {
