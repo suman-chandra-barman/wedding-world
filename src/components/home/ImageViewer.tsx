@@ -27,7 +27,7 @@ export default function ImageViewer({
         />
       </div>
       <div className="relative mx-4 xl:mx-0">
-        <div className="md:min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
+        <div className="w-full md:min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
           {generatedImageUrl || selectedDressImageUrl ? (
             <TransformWrapper
               key={viewerKey}
@@ -42,39 +42,37 @@ export default function ImageViewer({
               limitToBounds
             >
               {({ zoomIn, zoomOut }) => (
-                <div className="flex justify-center">
-                  <div className="relative inline-block max-w-full">
-                    <TransformComponent
-                      wrapperClass="inline-block max-w-full"
-                      contentClass="inline-block max-w-full"
-                    >
-                      <div>
-                        <img
-                          src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
-                          alt="Generated preview"
-                          draggable={false}
-                          className="block h-auto max-w-full select-none object-contain"
-                        />
-                      </div>
-                    </TransformComponent>
-                    <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
-                      <button
-                        type="button"
-                        aria-label="Zoom in"
-                        className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-                        onClick={() => zoomIn()}
-                      >
-                        <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
-                      </button>
-                      <button
-                        type="button"
-                        aria-label="Zoom out"
-                        className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-                        onClick={() => zoomOut()}
-                      >
-                        <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
-                      </button>
+                <div className="relative w-full">
+                  <TransformComponent
+                    wrapperClass="!block !w-full"
+                    contentClass="!block !w-full"
+                  >
+                    <div className="w-full">
+                      <img
+                        src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
+                        alt="Generated preview"
+                        draggable={false}
+                        className="block h-auto w-full select-none object-contain"
+                      />
                     </div>
+                  </TransformComponent>
+                  <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
+                    <button
+                      type="button"
+                      aria-label="Zoom in"
+                      className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                      onClick={() => zoomIn()}
+                    >
+                      <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Zoom out"
+                      className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                      onClick={() => zoomOut()}
+                    >
+                      <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
+                    </button>
                   </div>
                 </div>
               )}
