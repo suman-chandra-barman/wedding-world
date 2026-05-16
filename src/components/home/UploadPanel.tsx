@@ -105,7 +105,9 @@ export default function UploadPanel({
           </>
         )}
         {(uploadStatus === "uploading" || tryOnStatus === "loading") && (
-          <ImageUploadSkeleton />
+          <ImageUploadSkeleton
+            variant={tryOnStatus === "loading" ? "generate" : "upload"}
+          />
         )}
       </div>
 
