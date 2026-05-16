@@ -47,32 +47,33 @@ export default function ImageViewer({
                     wrapperClass="h-160 w-full"
                     contentClass="h-160 w-full"
                   >
-                    <img
-                      src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
-                      alt="Generated preview"
-                      draggable={false}
-                      className="h-160 w-full select-none object-cover"
-                    />
+                    <div>
+                      <img
+                        src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
+                        alt="Generated preview"
+                        draggable={false}
+                        className="h-160 w-full select-none object-cover"
+                      />
+                      <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
+                        <button
+                          type="button"
+                          aria-label="Zoom in"
+                          className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                          onClick={() => zoomIn()}
+                        >
+                          <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Zoom out"
+                          className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
+                          onClick={() => zoomOut()}
+                        >
+                          <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
+                        </button>
+                      </div>
+                    </div>
                   </TransformComponent>
-
-                  <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
-                    <button
-                      type="button"
-                      aria-label="Zoom in"
-                      className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-                      onClick={() => zoomIn()}
-                    >
-                      <ZoomIn className="h-5 w-5" strokeWidth={1.7} />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Zoom out"
-                      className="grid h-10 w-11 cursor-pointer place-items-center border-0 bg-transparent text-[#f6f5f5] transition hover:bg-white/7"
-                      onClick={() => zoomOut()}
-                    >
-                      <ZoomOut className="h-5 w-5" strokeWidth={1.7} />
-                    </button>
-                  </div>
                 </>
               )}
             </TransformWrapper>
