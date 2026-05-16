@@ -41,9 +41,9 @@ export default function UploadPanel({
       <Image
         src={secondaryImage}
         alt="Virtual Fitting Room"
-        className="w-full h-auto p-8 xl:p-0"
+        className="w-70 md:w-full h-auto p-4 xl:p-0 mx-auto"
       />
-      <p className="mt-0 mb-8 md:my-6  leading-6 text-[#161215] p-4 xl:p-0">
+      <p className="mt-0 md:my-6  leading-6 text-[#161215] pb-4 xl:p-0">
         Curious how your dream dress looks on you? Try on your favorite dress
         now in our virtual fitting room. Upload a photo of yourself and get a
         first impression of your fitting.
@@ -58,12 +58,12 @@ export default function UploadPanel({
         onChange={onUpload}
       />
 
-      <div className="group relative overflow-hidden rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+      <div className="group relative overflow-hidden w-50 sm:w-full mx-auto rounded-[0.85rem] border border-dashed border-[#ceb9a7] bg-[#f8f3ee] text-[#b48b6a] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
         {!uploadedImage ? (
           <button
             type="button"
             onClick={openFilePicker}
-            className="flex min-h-57 w-full cursor-pointer flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,#fbf7f3_0%,#f5eee8_100%)] px-6 py-10 text-[#b48b6a] transition hover:bg-[#f7f0ea]"
+            className="flex min-h-40 md:min-h-57 w-full cursor-pointer flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,#fbf7f3_0%,#f5eee8_100%)] px-6 py-10 text-[#b48b6a] transition hover:bg-[#f7f0ea]"
           >
             <ArrowUpFromLine />
             <span className="text-sm tracking-[0.16em] underline decoration-[#d7c1af] underline-offset-4">
@@ -75,7 +75,7 @@ export default function UploadPanel({
             <img
               src={uploadedImage}
               alt="Uploaded user"
-              className="h-57 w-full object-cover"
+              className="h-40 md:h-57 w-full object-cover"
             />
             <div className="pointer-events-none absolute inset-0 bg-[#6f6664]/46 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100" />
             <div className="pointer-events-none absolute bottom-4 right-2 grid w-40 gap-2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">

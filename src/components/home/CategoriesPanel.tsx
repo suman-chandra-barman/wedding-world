@@ -26,14 +26,14 @@ export default function CategoriesPanel({
 }: CategoriesPanelProps) {
   return (
     <section className="bg-white p-5 xl:p-6">
-      <h2 className="m-0 text-[1.7rem] font-semibold tracking-[0.01em]">
+      <h2 className="m-0 text-xl font-semibold tracking-[0.01em]">
         Wedding Dresses
       </h2>
       {isLoading ? (
         <CategoriesPanelSkeleton />
       ) : (
         <>
-          <div className="mt-8 max-w-55">
+          <div className="mt-8 md:max-w-none">
             <p className="leading-none font-bold text-[#ac8464]">Categories</p>
 
             <ul className="m-0 mt-4 list-none p-0 space-y-4">
@@ -67,7 +67,7 @@ export default function CategoriesPanel({
             </ul>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-4! lg:grid-cols-3 gap-2">
             {(selectedCategory?.images ?? []).map((image) => (
               <button
                 key={image.id}

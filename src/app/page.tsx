@@ -89,6 +89,7 @@ export default function HomePage() {
     };
   }, [uploadedImage]);
 
+  // Load try-on history on mount if session key exists
   useEffect(() => {
     const storedSessionKey = getStoredSessionKey();
     if (!storedSessionKey || tryOnHistory.length > 0) {
@@ -141,6 +142,7 @@ export default function HomePage() {
     };
   }, [apiUrl, getStoredSessionKey, tryOnHistory.length]);
 
+  // Clear try-on history when session key is removed (e.g., on logout or session expiration)
   useEffect(() => {
     const effectiveSessionKey = sessionKey ?? getStoredSessionKey();
     if (!effectiveSessionKey) {
@@ -231,6 +233,7 @@ export default function HomePage() {
     setUploadStatus("idle");
   };
 
+  // Category selection handler
   const onSelectCategory = (category: Category) => {
     setSelectedCategoryId(category.category_id);
     const firstImage = category.images[0] ?? null;
@@ -248,6 +251,7 @@ export default function HomePage() {
     setSelectedDressImageUrl(image.image_url);
   };
 
+  // Try-On selection toggle handler
   const toggleTryOnSelection = (id: number) => {
     setSelectedTryOnIds((prev) => {
       const next = new Set(prev);
@@ -365,46 +369,54 @@ export default function HomePage() {
             The Wedding World Virtual Bridal Experience
           </div>
 
-          <div className="grid min-h-160 grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)_minmax(0,1.95fr)_minmax(0,1.15fr)]">
-            <UploadPanel
-              uploadedImage={uploadedImage}
-              uploadStatus={uploadStatus}
-              tryOnStatus={tryOnStatus}
-              onUpload={onUpload}
-              onTryOn={onTryOn}
-              onRemove={removePhoto}
-            />
+          <div className="grid min-h-160 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)_minmax(0,1.95fr)_minmax(0,1.15fr)] xl:gap-0">
+            <div className="md:order-1 xl:order-0">
+              <UploadPanel
+                uploadedImage={uploadedImage}
+                uploadStatus={uploadStatus}
+                tryOnStatus={tryOnStatus}
+                onUpload={onUpload}
+                onTryOn={onTryOn}
+                onRemove={removePhoto}
+              />
+            </div>
 
-            <CategoriesPanel
-              categories={categories}
-              selectedCategoryId={selectedCategoryId}
-              selectedCategory={selectedCategory}
-              selectedDressImageId={selectedDressImageId}
-              isLoading={isCategoriesLoading}
-              onSelectCategory={onSelectCategory}
-              onSelectDressImage={onSelectDressImage}
-            />
+            <div className="md:order-2 xl:order-0">
+              <CategoriesPanel
+                categories={categories}
+                selectedCategoryId={selectedCategoryId}
+                selectedCategory={selectedCategory}
+                selectedDressImageId={selectedDressImageId}
+                isLoading={isCategoriesLoading}
+                onSelectCategory={onSelectCategory}
+                onSelectDressImage={onSelectDressImage}
+              />
+            </div>
 
-            <ImageViewer
-              generatedImageUrl={generatedImageUrl}
-              selectedDressImageUrl={selectedDressImageUrl}
-            />
+            <div className="md:order-3 xl:order-0">
+              <ImageViewer
+                generatedImageUrl={generatedImageUrl}
+                selectedDressImageUrl={selectedDressImageUrl}
+              />
+            </div>
 
-            <TryOnSidebar
-              tryOnHistory={tryOnHistory}
-              selectedTryOnIds={selectedTryOnIds}
-              activeTryOnId={activeTryOnId}
-              isLoading={isTryOnHistoryLoading}
-              onToggleTryOn={toggleTryOnSelection}
-              onPreviewTryOn={(item) => {
-                setGeneratedImageUrl(item.generatedImage);
-                setActiveTryOnId(item.id);
-              }}
-              email={email}
-              onEmailChange={(event) => setEmail(event.target.value)}
-              sendStatus={sendStatus}
-              onSendEmail={onSendEmail}
-            />
+            <div className="md:order-4 xl:order-0">
+              <TryOnSidebar
+                tryOnHistory={tryOnHistory}
+                selectedTryOnIds={selectedTryOnIds}
+                activeTryOnId={activeTryOnId}
+                isLoading={isTryOnHistoryLoading}
+                onToggleTryOn={toggleTryOnSelection}
+                onPreviewTryOn={(item) => {
+                  setGeneratedImageUrl(item.generatedImage);
+                  setActiveTryOnId(item.id);
+                }}
+                email={email}
+                onEmailChange={(event) => setEmail(event.target.value)}
+                sendStatus={sendStatus}
+                onSendEmail={onSendEmail}
+              />
+            </div>
           </div>
         </div>
       </section>

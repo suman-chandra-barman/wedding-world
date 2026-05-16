@@ -19,7 +19,7 @@ export default function ImageViewer({
 
   return (
     <section className=" bg-white xl:pt-6">
-      <div className="mb-4 flex justify-center sm:hidden">
+      <div className="mb-4 pt-4 flex justify-center sm:hidden">
         <Image
           src={secondaryImage}
           alt="See yourself as a bride"
@@ -27,7 +27,7 @@ export default function ImageViewer({
         />
       </div>
       <div className="relative mx-4 xl:mx-0">
-        <div className="min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
+        <div className="md:min-h-105 overflow-hidden rounded-[0.7rem] sm:min-h-130 xl:min-h-147">
           {generatedImageUrl || selectedDressImageUrl ? (
             <TransformWrapper
               key={viewerKey}
@@ -52,7 +52,7 @@ export default function ImageViewer({
                         src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
                         alt="Generated preview"
                         draggable={false}
-                        className="h-160 w-full select-none object-cover"
+                        className="md:h-160 w-full select-none object-cover"
                       />
                       <div className="absolute right-6 top-6 overflow-hidden rounded-[0.42rem] border border-white/10 bg-[rgba(59,55,54,0.78)] shadow-[0_12px_20px_rgba(12,10,10,0.24)] backdrop-blur-[1.5px]">
                         <button

@@ -13,7 +13,7 @@ const Header = () => {
         </span>
       </section>
 
-      <header className="container mx-auto flex flex-col items-stretch justify-center gap-16 rounded-[0.35rem] bg-white p-4 sm:flex-row sm:items-center sm:gap-12 sm:px-8">
+      <header className="container mx-auto flex flex-col items-stretch justify-center gap-4 rounded-[0.35rem] bg-white p-4 sm:flex-row sm:items-center sm:gap-12 sm:px-8">
         <div className="grid justify-items-center gap-1">
           <Image src={logo} alt="Wedding World Logo" className="h-14 w-auto" />
         </div>
