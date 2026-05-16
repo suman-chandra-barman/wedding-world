@@ -11,8 +11,8 @@ function CategoriesPanelSkeleton() {
         ))}
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-2">
-        {[0, 1, 2, 3, 4, 5].map((item) => (
+      <div className="mt-6 grid grid-cols-4 gap-2">
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
           <div
             key={item}
             className="aspect-3/4 w-full rounded-[0.42rem] bg-[#e6ded8] animate-pulse"
