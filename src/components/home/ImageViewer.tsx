@@ -52,7 +52,7 @@ export default function ImageViewer({
                         src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
                         alt="Generated preview"
                         draggable={false}
-                        className="block h-auto w-full select-none object-contain"
+                        className="block h-auto w-full select-none object-cover"
                       />
                     </div>
                   </TransformComponent>
