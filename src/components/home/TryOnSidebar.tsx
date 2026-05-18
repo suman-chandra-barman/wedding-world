@@ -4,6 +4,7 @@
 import { ChangeEvent } from "react";
 import type { SendStatus, TryOnItem } from "./types";
 import TryOnSidebarSkeleton from "../skeleton/TryOnSidebarSkeleton";
+import Link from "next/link";
 
 type TryOnSidebarProps = {
   tryOnHistory: TryOnItem[];
@@ -98,6 +99,11 @@ export default function TryOnSidebar({
         >
           {sendStatus === "sending" ? "SENDING..." : "SEND"}
         </button>
+        <Link href="https://www.weddingworld.de/termin-buchen/terminbuchung-braut" target="_blank" rel="noopener noreferrer">
+          <button className="mt-2 uppercase w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70">
+            Book Appointment
+          </button>
+        </Link>
       </div>
     </aside>
   );
