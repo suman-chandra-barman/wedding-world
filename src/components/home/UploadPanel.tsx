@@ -43,11 +43,19 @@ export default function UploadPanel({
         alt="Virtual Fitting Room"
         className="w-70 md:w-full h-auto p-4 xl:p-0 mx-auto"
       />
-      <p className="mt-0 md:my-6  leading-6 text-[#161215] pb-4 xl:p-0">
-        Curious how your dream dress looks on you? Try on your favorite dress
-        now in our virtual fitting room. Upload a photo of yourself and get a
-        first impression of your fitting.
-      </p>
+      <div className="mt-0 md:my-4 px-4 xl:p-0">
+        <h3 className="text-sm font-semibold text-[#161215] mb-1">
+          Probiere jetzt dein Lieblingskleid in unserer Virtual Bridal Fitting
+          Room an.
+        </h3>
+        <ol className="text-sm text-[#161215] list-decimal list-inside">
+          <li>Lade ein Foto von dir hoch</li>
+          <li>Wähle dein Lieblingskleid aus</li>
+          <li>Sieh dich selbst als Braut</li>
+          <li>Sende dir deine Kleider per E-Mail</li>
+        </ol>
+        <p className="text-xs text-[#8d8179] mt-2">(maximal 3 Anproben)</p>
+      </div>
 
       <input
         ref={fileInputRef}
@@ -77,8 +85,8 @@ export default function UploadPanel({
               alt="Uploaded user"
               className="h-40 md:h-57 w-full object-cover"
             />
-            <div className="pointer-events-none absolute inset-0 bg-[#6f6664]/46 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100" />
-            <div className="pointer-events-none absolute bottom-4 right-2 grid w-40 gap-1 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+            <div className="pointer-events-none absolute inset-0 bg-[#6f6664]/46 opacity-0 md:opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100" />
+            <div className="pointer-events-none absolute bottom-4 right-2 grid w-40 gap-1 opacity-100 md:opacity-0 md:pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:pointer-events-auto group-focus-within:opacity-100">
               <button
                 type="button"
                 className="flex w-full items-center gap-2 rounded-none border border-white/10 bg-[#1f1a1b] px-3 py-2 text-left text-[0.8rem] text-[#f8f6f5] shadow-[0_10px_22px_rgba(42,35,35,0.25)] transition hover:bg-[#30292b]"
