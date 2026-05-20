@@ -366,7 +366,7 @@ export default function HomePage() {
       <section className="bg-[#EDEAE6] pb-8 px-2 py-4 sm:p-4">
         <div className="container mx-auto overflow-hidden rounded-[0.6rem] bg-[#f8f5f3]">
           <div className="bg-[#ab8466] px-3 py-2 text-center text-[0.86rem] text-[#f7ede4]">
-            The Wedding World Virtual Bridal Experience
+            Wedding World Virtual Bridal Fitting Room
           </div>
 
           <div className="grid min-h-160 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)_minmax(0,1.95fr)_minmax(0,1.15fr)] xl:gap-0">

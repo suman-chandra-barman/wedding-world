@@ -7,16 +7,16 @@ const Header = () => {
     <header>
       {/* top header */}
       <section className="bg-[#EDEAE6] px-6 py-3 text-center text-[#8d8179] sm:px-8 flex flex-col items-center sm:flex-row sm:justify-center sm:gap-2">
-        <span>Guest at the largest and </span>
+        <span>Zu Gast beim größten und </span>
         {"  "}
         <span className="text-[#161215] ">
-          most beautiful out&shy;fitter in Germany.
+          schönsten Ausstatter Deutschlands 
         </span>
       </section>
 
       <header className="container mx-auto flex flex-col items-stretch justify-center gap-4 rounded-[0.35rem] bg-white p-4 sm:flex-row sm:items-center sm:gap-12 sm:px-8">
         <div className="grid justify-items-center gap-1">
-          <Image src={logo} alt="Wedding World Logo" className="h-14 w-auto" />
+          <Image src={logo} alt="Wedding World Logo" className="h-18 w-auto" />
         </div>
         <nav className="flex flex-wrap justify-center gap-2 sm:justify-end">
           <Link
@@ -26,9 +26,9 @@ const Header = () => {
           >
             <button
               type="button"
-              className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
+              className="cursor-pointer uppercase rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
             >
-              BACK TO WEDDING WORLD
+              Zurück zur Wedding World
             </button>
           </Link>
           <Link
@@ -36,23 +36,8 @@ const Header = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <button
-              type="button"
-              className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
-            >
-              VIEW 2026 COLLECTION
-            </button>
-          </Link>
-          <Link
-            href="https://www.weddingworld.de/termin-buchen/terminbuchung-braut"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <button
-              type="button"
-              className="cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]"
-            >
-              BOOK APPOINTMENT
+            <button className="cursor-pointer uppercase rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.66rem] tracking-[0.03em] text-[#f7f3f1] transition hover:bg-[#30292b]">
+              Kollektion ansehen
             </button>
           </Link>
         </nav>
