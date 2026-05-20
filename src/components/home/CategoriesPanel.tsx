@@ -1,8 +1,8 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { ChevronDown, ChevronRight } from "lucide-react";
-import type { Category, CategoryImage } from "./types";
+import { ChevronDown, ChevronRight, WandSparkles } from "lucide-react";
+import type { Category, CategoryImage, TryOnStatus } from "./types";
 import CategoriesPanelSkeleton from "../skeleton/CategoriesPanelSkeleton";
 
 type CategoriesPanelProps = {
@@ -11,8 +11,10 @@ type CategoriesPanelProps = {
   selectedCategory: Category | undefined;
   selectedDressImageId: number | null;
   isLoading: boolean;
+  tryOnStatus?: TryOnStatus;
   onSelectCategory: (category: Category) => void;
   onSelectDressImage: (image: CategoryImage) => void;
+  onTryOn?: () => void;
 };
 
 export default function CategoriesPanel({
@@ -21,8 +23,10 @@ export default function CategoriesPanel({
   selectedCategory,
   selectedDressImageId,
   isLoading,
+  tryOnStatus = "idle",
   onSelectCategory,
   onSelectDressImage,
+  onTryOn,
 }: CategoriesPanelProps) {
   return (
     <section className="bg-white p-5 xl:p-6">
@@ -92,6 +96,18 @@ export default function CategoriesPanel({
               </div>
             )}
           </div>
+
+          {onTryOn && (
+            <button
+              type="button"
+              className="md:hidden mt-4 flex w-full cursor-pointer items-center justify-center gap-4 rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.88rem] tracking-[0.05em] text-[#f7f4ff] transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70"
+              onClick={onTryOn}
+              disabled={tryOnStatus === "loading"}
+            >
+              <WandSparkles />
+              {tryOnStatus === "loading" ? "GENERATING..." : "TRY ON"}
+            </button>
+          )}
         </>
       )}
     </section>

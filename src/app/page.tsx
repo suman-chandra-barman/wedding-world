@@ -388,8 +388,10 @@ export default function HomePage() {
                 selectedCategory={selectedCategory}
                 selectedDressImageId={selectedDressImageId}
                 isLoading={isCategoriesLoading}
+                tryOnStatus={tryOnStatus}
                 onSelectCategory={onSelectCategory}
                 onSelectDressImage={onSelectDressImage}
+                onTryOn={onTryOn}
               />
             </div>
 
