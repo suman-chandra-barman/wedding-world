@@ -60,7 +60,7 @@ export default function TryOnSidebar({
                   key={item.id}
                   type="button"
                   className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-1 rounded-md border bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
-                    isActive || isSelected
+                    isActive
                       ? "bg-white/80 border-[#e3d8cf]"
                       : "border-transparent"
                   }`}

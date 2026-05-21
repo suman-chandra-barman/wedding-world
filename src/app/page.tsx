@@ -242,11 +242,15 @@ export default function HomePage() {
       setSelectedDressImageId(null);
       setActiveImageUrl(null);
     }
+    setSelectedTryOnIds(new Set());
+    setActiveTryOnId(null);
   };
 
   const onSelectDressImage = (image: CategoryImage) => {
     setSelectedDressImageId(image.id);
     setActiveImageUrl(image.image_url);
+    setSelectedTryOnIds(new Set());
+    setActiveTryOnId(null);
   };
 
   // Try-On selection toggle handler
@@ -427,6 +431,7 @@ export default function HomePage() {
                 onPreviewTryOn={(item) => {
                   setActiveImageUrl(item.generatedImage);
                   setActiveTryOnId(item.id);
+                  setSelectedDressImageId(null);
                 }}
                 email={email}
                 onEmailChange={(event) => setEmail(event.target.value)}
