@@ -43,7 +43,7 @@ export default function TryOnSidebar({
   return (
     <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
       <div>
-        <h2 className="text-xl font-semibold mb-4">Your Try On</h2>
+        <h2 className="text-xl font-semibold mb-4">Your try on</h2>
         <div className="overflow-y-auto max-h-100 grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
           {isLoading ? (
             <TryOnSidebarSkeleton />
@@ -67,13 +67,13 @@ export default function TryOnSidebar({
                   <Image
                     src={item.generatedImage}
                     alt={`Try on ${item.id}`}
-                    className="h-19 w-14 rounded-[0.28rem] object-cover"
-                    width={56}
+                    className="h-16 w-14 rounded-[0.28rem] object-cover"
+                    width={58}
                     height={76}
                   />
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[0.9rem] text-[#3f3734]">
-                      Generated {item.id}
+                    <span className="text-[0.88rem] text-[#3f3734]">
+                      Wedding dress {item.id}
                     </span>
                     <input
                       type="checkbox"

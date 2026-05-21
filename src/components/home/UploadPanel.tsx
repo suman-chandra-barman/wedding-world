@@ -71,7 +71,7 @@ export default function UploadPanel({
           <button
             type="button"
             onClick={openFilePicker}
-            className="flex min-h-40 md:min-h-57 w-full cursor-pointer flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,#fbf7f3_0%,#f5eee8_100%)] px-6 py-10 text-[#b48b6a] transition hover:bg-[#f7f0ea]"
+            className="flex min-h-40 md:min-h-46 w-full cursor-pointer flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,#fbf7f3_0%,#f5eee8_100%)] px-6 py-10 text-[#b48b6a] transition hover:bg-[#f7f0ea]"
           >
             <ArrowUpFromLine />
             <span className="text-sm tracking-[0.16em] underline decoration-[#d7c1af] underline-offset-4">
@@ -83,7 +83,7 @@ export default function UploadPanel({
             <Image
               src={uploadedImage}
               alt="Uploaded user"
-              className="h-40 md:h-57 w-full object-cover"
+              className="h-40 md:h-46 w-full object-cover"
               width={300}
               height={400}
             />
