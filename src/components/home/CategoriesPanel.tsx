@@ -78,10 +78,10 @@ export default function CategoriesPanel({
                 <button
                   key={image.id}
                   type="button"
-                  className={`overflow-hidden rounded-[0.42rem] border-3 bg-transparent p-0 transition ${
+                  className={`overflow-hidden rounded-[0.42rem] border-2 bg-transparent p-0 transition ${
                     image.id === selectedDressImageId
-                      ? "border-[#b48c6c]"
-                      : "border-transparent hover:border-[#d7c1af]"
+                      ? "border-black"
+                      : "border-transparent hover:border-black/50"
                   }`}
                   onClick={() => onSelectDressImage(image)}
                 >

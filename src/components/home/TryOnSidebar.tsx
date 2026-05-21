@@ -60,7 +60,9 @@ export default function TryOnSidebar({
                   key={item.id}
                   type="button"
                   className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-1 rounded-md border bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
-                    isActive || isSelected ? "bg-white/80 border-[#e3d8cf]" : "border-transparent"
+                    isActive || isSelected
+                      ? "bg-white/80 border-[#e3d8cf]"
+                      : "border-transparent"
                   }`}
                   onClick={() => onPreviewTryOn(item)}
                 >
@@ -120,17 +122,18 @@ export default function TryOnSidebar({
             htmlFor="privacy-checkbox"
             className="text-xs leading-relaxed text-[#6b6360] cursor-pointer"
           >
-            I agree that my personal data and photos will be stored and
-            processed according to the{" "}
+            Ja, ich möchte News und Aktionen von Wedding World erhalten. Ich
+            stimme der Nutzung meiner Daten zu Informations- und Werbezwecken zu
+            und kann meine Einwilligung jederzeit widerrufen. Die{" "}
             <Link
               href="/privacy"
               className="underline hover:text-[#b48c6c] transition"
               target="_blank"
               rel="noopener noreferrer"
             >
-              privacy policy
-            </Link>
-            .
+              Datenschutzhinweise
+            </Link>{" "}
+            habe ich gelesen und akzeptiert.
           </label>
         </div>
 
@@ -151,7 +154,7 @@ export default function TryOnSidebar({
           rel="noopener noreferrer"
         >
           <button className="mt-2 uppercase w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70">
-            Book Appointment
+            TERMIN BUCHEN
           </button>
         </Link>
       </div>

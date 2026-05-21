@@ -44,11 +44,11 @@ export default function UploadPanel({
         className="w-70 md:w-full h-auto p-4 xl:p-0 mx-auto"
       />
       <div className="mt-0 md:my-4 px-4 xl:p-0">
-        <h3 className="text-sm font-semibold text-[#161215] mb-1">
+        <h3 className="text-sm font-semibold text-[#161215] mb-2">
           Probiere jetzt dein Lieblingskleid in unserer Virtual Bridal Fitting
           Room an.
         </h3>
-        <ol className="text-sm text-[#161215] list-decimal list-inside">
+        <ol className="text-sm text-[#161215] list-decimal list-inside space-y-1">
           <li>Lade ein Foto von dir hoch</li>
           <li>Wähle dein Lieblingskleid aus</li>
           <li>Sieh dich selbst als Braut</li>
