@@ -11,7 +11,7 @@ function CategoriesPanelSkeleton() {
         ))}
       </div>
 
-      <div className="mt-6 grid grid-cols-4 gap-2">
+      <div className="mt-6 grid grid-cols-3 gap-2">
         {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
           <div
             key={item}
