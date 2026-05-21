@@ -5,6 +5,7 @@ import { ChangeEvent } from "react";
 import type { SendStatus, TryOnItem } from "./types";
 import TryOnSidebarSkeleton from "../skeleton/TryOnSidebarSkeleton";
 import Link from "next/link";
+import Image from "next/image";
 
 type TryOnSidebarProps = {
   tryOnHistory: TryOnItem[];
@@ -17,6 +18,8 @@ type TryOnSidebarProps = {
   onEmailChange: (event: ChangeEvent<HTMLInputElement>) => void;
   sendStatus: SendStatus;
   onSendEmail: () => void;
+  isPrivacyAccepted: boolean;
+  onPrivacyChange: (accepted: boolean) => void;
 };
 
 export default function TryOnSidebar({
@@ -30,7 +33,13 @@ export default function TryOnSidebar({
   onEmailChange,
   sendStatus,
   onSendEmail,
+  isPrivacyAccepted,
+  onPrivacyChange,
 }: TryOnSidebarProps) {
+  // Validation: Email format check
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const isEmailNotEmpty = email.trim().length > 0;
+  const canSendEmail = isEmailNotEmpty && isValidEmail && isPrivacyAccepted;
   return (
     <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
       <div>
@@ -55,10 +64,12 @@ export default function TryOnSidebar({
                   }`}
                   onClick={() => onPreviewTryOn(item)}
                 >
-                  <img
+                  <Image
                     src={item.generatedImage}
                     alt={`Try on ${item.id}`}
                     className="h-19 w-14 rounded-[0.28rem] object-cover"
+                    width={56}
+                    height={76}
                   />
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[0.9rem] text-[#3f3734]">
@@ -84,22 +95,61 @@ export default function TryOnSidebar({
         <h3 className="mb-3 text-lg lg:text-xl font-semibold leading-[1.18] text-[#161215">
           Send me my photos via email.
         </h3>
+
+        {/* Email Input Field */}
         <input
           type="email"
           placeholder="EMAIL"
-          className="mb-3 w-full rounded-none border border-[#ded6d0] bg-[#f7f5f4] px-3 py-2.5 text-[#4d4642] outline-none transition placeholder:text-[#8f837b] focus:border-[#b48c6c]"
+          className="mb-4 w-full rounded-none border border-[#ded6d0] bg-[#f7f5f4] px-3 py-2.5 text-[#4d4642] outline-none transition placeholder:text-[#8f837b] focus:border-[#b48c6c]"
           value={email}
           onChange={onEmailChange}
+          aria-label="Email address"
         />
+
+        {/* Privacy Statement Checkbox */}
+        <div className="mb-4 flex items-start gap-2.5">
+          <input
+            type="checkbox"
+            id="privacy-checkbox"
+            checked={isPrivacyAccepted}
+            onChange={(e) => onPrivacyChange(e.target.checked)}
+            className="mt-1 h-4 w-4 cursor-pointer rounded border border-[#b48c6c] text-[#b48c6c] accent-[#b48c6c] flex-shrink-0"
+            aria-label="Accept privacy statement"
+          />
+          <label
+            htmlFor="privacy-checkbox"
+            className="text-xs leading-relaxed text-[#6b6360] cursor-pointer"
+          >
+            I agree that my personal data and photos will be stored and
+            processed according to the{" "}
+            <Link
+              href="/privacy"
+              className="underline hover:text-[#b48c6c] transition"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              privacy policy
+            </Link>
+            .
+          </label>
+        </div>
+
+        {/* Send Button */}
         <button
           type="button"
           className="mt-1 w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70"
           onClick={onSendEmail}
-          disabled={sendStatus === "sending"}
+          disabled={!canSendEmail || sendStatus === "sending"}
+          aria-label="Send photos via email"
         >
           {sendStatus === "sending" ? "SENDING..." : "SEND"}
         </button>
-        <Link href="https://www.weddingworld.de/termin-buchen/terminbuchung-braut" target="_blank" rel="noopener noreferrer">
+
+        <Link
+          href="https://www.weddingworld.de/termin-buchen/terminbuchung-braut"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <button className="mt-2 uppercase w-full cursor-pointer rounded-none border-0 bg-[#1f1a1b] px-4 py-3 text-[0.74rem] tracking-[0.06em] text-white transition hover:bg-[#30292b] disabled:cursor-not-allowed disabled:opacity-70">
             Book Appointment
           </button>

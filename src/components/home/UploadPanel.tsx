@@ -80,10 +80,12 @@ export default function UploadPanel({
           </button>
         ) : (
           <>
-            <img
+            <Image
               src={uploadedImage}
               alt="Uploaded user"
               className="h-40 md:h-57 w-full object-cover"
+              width={300}
+              height={400}
             />
             <div className="pointer-events-none absolute inset-0 bg-[#6f6664]/46 opacity-0 md:opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100" />
             <div className="pointer-events-none absolute bottom-4 right-2 grid w-40 gap-1 opacity-100 md:opacity-0 md:pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:pointer-events-auto group-focus-within:opacity-100">

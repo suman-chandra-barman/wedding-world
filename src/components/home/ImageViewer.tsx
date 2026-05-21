@@ -48,11 +48,13 @@ export default function ImageViewer({
                     contentClass="!block !w-full"
                   >
                     <div className="w-full">
-                      <img
+                      <Image
                         src={generatedImageUrl ?? selectedDressImageUrl ?? ""}
                         alt="Generated preview"
                         draggable={false}
                         className="block h-auto w-full select-none object-cover"
+                        width={600}
+                        height={800}
                       />
                     </div>
                   </TransformComponent>

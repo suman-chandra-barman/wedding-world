@@ -43,6 +43,7 @@ export default function HomePage() {
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
     null,
   );
+  const [activeImageUrl, setActiveImageUrl] = useState<string | null>(null);
   const [tryOnHistory, setTryOnHistory] = useState<TryOnItem[]>([]);
   const [isTryOnHistoryLoading, setIsTryOnHistoryLoading] =
     useState<boolean>(false);
@@ -51,6 +52,7 @@ export default function HomePage() {
   );
   const [activeTryOnId, setActiveTryOnId] = useState<number | null>(null);
   const [email, setEmail] = useState<string>("");
+  const [isPrivacyAccepted, setIsPrivacyAccepted] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
   const [tryOnStatus, setTryOnStatus] = useState<TryOnStatus>("idle");
   const [sendStatus, setSendStatus] = useState<SendStatus>("idle");
@@ -123,6 +125,7 @@ export default function HomePage() {
         setSelectedTryOnIds(new Set());
         if (mapped[0]) {
           setGeneratedImageUrl(mapped[0].generatedImage);
+          setActiveImageUrl(mapped[0].generatedImage);
           setActiveTryOnId(mapped[0].id);
         }
       } catch (error) {
@@ -149,6 +152,8 @@ export default function HomePage() {
       setTryOnHistory([]);
       setSelectedTryOnIds(new Set());
       setActiveTryOnId(null);
+      setGeneratedImageUrl(null);
+      setActiveImageUrl(null);
       setIsTryOnHistoryLoading(false);
     }
   }, [getStoredSessionKey, sessionKey]);
@@ -172,6 +177,7 @@ export default function HomePage() {
           if (firstImage) {
             setSelectedDressImageId(firstImage.id);
             setSelectedDressImageUrl(firstImage.image_url);
+            setActiveImageUrl(firstImage.image_url);
           }
         }
       } catch (error) {
@@ -231,6 +237,8 @@ export default function HomePage() {
     setSessionKey(null);
     setUserImageId(null);
     setUploadStatus("idle");
+    setGeneratedImageUrl(null);
+    setActiveImageUrl(null);
   };
 
   // Category selection handler
@@ -240,15 +248,18 @@ export default function HomePage() {
     if (firstImage) {
       setSelectedDressImageId(firstImage.id);
       setSelectedDressImageUrl(firstImage.image_url);
+      setActiveImageUrl(firstImage.image_url);
     } else {
       setSelectedDressImageId(null);
       setSelectedDressImageUrl(null);
+      setActiveImageUrl(null);
     }
   };
 
   const onSelectDressImage = (image: CategoryImage) => {
     setSelectedDressImageId(image.id);
     setSelectedDressImageUrl(image.image_url);
+    setActiveImageUrl(image.image_url);
   };
 
   // Try-On selection toggle handler
@@ -309,6 +320,7 @@ export default function HomePage() {
       };
 
       setGeneratedImageUrl(payload.generated_image);
+      setActiveImageUrl(payload.generated_image);
       setActiveTryOnId(payload.id);
       setTryOnHistory((prev) => [nextItem, ...prev]);
       setTryOnStatus("success");
@@ -320,8 +332,25 @@ export default function HomePage() {
 
   // Send Email handler
   const onSendEmail = async () => {
-    if (!email.trim()) {
-      setPopupMessage("Please enter your email first.");
+    // Email validation
+    const trimmedEmail = email.trim();
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+
+    if (!trimmedEmail) {
+      setPopupMessage("Please enter your email address.");
+      return;
+    }
+
+    if (!isValidEmail) {
+      setPopupMessage("Please enter a valid email address.");
+      return;
+    }
+
+    // Privacy validation
+    if (!isPrivacyAccepted) {
+      setPopupMessage(
+        "Please accept the privacy statement before sending your images.",
+      );
       return;
     }
 
@@ -342,7 +371,7 @@ export default function HomePage() {
         },
         body: JSON.stringify({
           generated_image_ids: Array.from(selectedTryOnIds),
-          email: email.trim(),
+          email: trimmedEmail,
         }),
       });
 
@@ -397,8 +426,8 @@ export default function HomePage() {
 
             <div className="md:order-3 xl:order-0">
               <ImageViewer
-                generatedImageUrl={generatedImageUrl}
-                selectedDressImageUrl={selectedDressImageUrl}
+                generatedImageUrl={activeImageUrl}
+                selectedDressImageUrl={activeImageUrl}
               />
             </div>
 
@@ -411,12 +440,15 @@ export default function HomePage() {
                 onToggleTryOn={toggleTryOnSelection}
                 onPreviewTryOn={(item) => {
                   setGeneratedImageUrl(item.generatedImage);
+                  setActiveImageUrl(item.generatedImage);
                   setActiveTryOnId(item.id);
                 }}
                 email={email}
                 onEmailChange={(event) => setEmail(event.target.value)}
                 sendStatus={sendStatus}
                 onSendEmail={onSendEmail}
+                isPrivacyAccepted={isPrivacyAccepted}
+                onPrivacyChange={setIsPrivacyAccepted}
               />
             </div>
           </div>

@@ -4,6 +4,7 @@
 import { ChevronDown, ChevronRight, WandSparkles } from "lucide-react";
 import type { Category, CategoryImage, TryOnStatus } from "./types";
 import CategoriesPanelSkeleton from "../skeleton/CategoriesPanelSkeleton";
+import Image from "next/image";
 
 type CategoriesPanelProps = {
   categories: Category[];
@@ -71,7 +72,7 @@ export default function CategoriesPanel({
             </ul>
           </div>
 
-          <div className="mt-4 grid grid-cols-4! lg:grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-3 md:grid-cols-4!  gap-2">
             {(selectedCategory?.images ?? []).map((image) => (
               <button
                 key={image.id}
@@ -83,10 +84,12 @@ export default function CategoriesPanel({
                 }`}
                 onClick={() => onSelectDressImage(image)}
               >
-                <img
+                <Image
                   src={image.image_url}
                   alt={`Dress ${image.id}`}
                   className="aspect-3/4 w-full object-cover"
+                  width={300}
+                  height={400}
                 />
               </button>
             ))}
