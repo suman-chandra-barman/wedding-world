@@ -44,7 +44,7 @@ export default function TryOnSidebar({
     <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
       <div>
         <h2 className="text-xl font-semibold mb-4">Your try on</h2>
-        <div className="overflow-y-auto lg:h-67 grid gap-2 items-start rounded-lg bg-[#EDEAE6] p-3">
+        <div className="overflow-y-auto lg:h-67 space-y-1 rounded-lg bg-[#EDEAE6] p-3">
           {isLoading ? (
             <TryOnSidebarSkeleton />
           ) : tryOnHistory.length === 0 ? (
