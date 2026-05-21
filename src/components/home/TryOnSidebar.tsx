@@ -44,7 +44,7 @@ export default function TryOnSidebar({
     <aside className="flex flex-col justify-between gap-4 p-4 xl:p-5 bg-white">
       <div>
         <h2 className="text-xl font-semibold mb-4">Your try on</h2>
-        <div className="overflow-y-auto max-h-100 grid gap-3 rounded-lg bg-[#EDEAE6] p-3">
+        <div className="overflow-y-auto max-h-67 grid gap-2 rounded-lg bg-[#EDEAE6] p-3">
           {isLoading ? (
             <TryOnSidebarSkeleton />
           ) : tryOnHistory.length === 0 ? (
@@ -59,8 +59,8 @@ export default function TryOnSidebar({
                 <button
                   key={item.id}
                   type="button"
-                  className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-2 rounded-md border-0 bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
-                    isActive || isSelected ? "bg-white/80" : ""
+                  className={`grid grid-cols-[58px_minmax(0,1fr)] items-center gap-1 rounded-md border bg-transparent p-1.5 text-left transition hover:bg-white/45 ${
+                    isActive || isSelected ? "bg-white/80 border-[#e3d8cf]" : "border-transparent"
                   }`}
                   onClick={() => onPreviewTryOn(item)}
                 >

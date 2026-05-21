@@ -72,32 +72,34 @@ export default function CategoriesPanel({
             </ul>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {(selectedCategory?.images ?? []).map((image) => (
-              <button
-                key={image.id}
-                type="button"
-                className={`overflow-hidden rounded-[0.42rem] border-3 bg-transparent p-0 transition ${
-                  image.id === selectedDressImageId
-                    ? "border-[#b48c6c]"
-                    : "border-transparent hover:border-[#d7c1af]"
-                }`}
-                onClick={() => onSelectDressImage(image)}
-              >
-                <Image
-                  src={image.image_url}
-                  alt={`Dress ${image.id}`}
-                  className="aspect-3/4 w-full object-cover"
-                  width={300}
-                  height={400}
-                />
-              </button>
-            ))}
-            {!selectedCategory?.images.length && (
-              <div className="col-span-3 rounded-md border border-dashed border-[#e3d8cf] bg-[#f7f5f4] px-4 py-6 text-center text-sm text-[#8d8179]">
-                No dress in this category yet.
-              </div>
-            )}
+          <div className="h-95 overflow-y-auto">
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {(selectedCategory?.images ?? []).map((image) => (
+                <button
+                  key={image.id}
+                  type="button"
+                  className={`overflow-hidden rounded-[0.42rem] border-3 bg-transparent p-0 transition ${
+                    image.id === selectedDressImageId
+                      ? "border-[#b48c6c]"
+                      : "border-transparent hover:border-[#d7c1af]"
+                  }`}
+                  onClick={() => onSelectDressImage(image)}
+                >
+                  <Image
+                    src={image.image_url}
+                    alt={`Dress ${image.id}`}
+                    className="aspect-3/4 w-full object-cover"
+                    width={300}
+                    height={400}
+                  />
+                </button>
+              ))}
+              {!selectedCategory?.images.length && (
+                <div className="col-span-3 rounded-md border border-dashed border-[#e3d8cf] bg-[#f7f5f4] px-4 py-6 text-center text-sm text-[#8d8179]">
+                  No dress in this category yet.
+                </div>
+              )}
+            </div>
           </div>
 
           {onTryOn && (
