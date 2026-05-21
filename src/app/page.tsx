@@ -37,12 +37,6 @@ export default function HomePage() {
   const [selectedDressImageId, setSelectedDressImageId] = useState<
     number | null
   >(null);
-  const [selectedDressImageUrl, setSelectedDressImageUrl] = useState<
-    string | null
-  >(null);
-  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
-    null,
-  );
   const [activeImageUrl, setActiveImageUrl] = useState<string | null>(null);
   const [tryOnHistory, setTryOnHistory] = useState<TryOnItem[]>([]);
   const [isTryOnHistoryLoading, setIsTryOnHistoryLoading] =
@@ -124,7 +118,6 @@ export default function HomePage() {
         setTryOnHistory(mapped);
         setSelectedTryOnIds(new Set());
         if (mapped[0]) {
-          setGeneratedImageUrl(mapped[0].generatedImage);
           setActiveImageUrl(mapped[0].generatedImage);
           setActiveTryOnId(mapped[0].id);
         }
@@ -152,7 +145,6 @@ export default function HomePage() {
       setTryOnHistory([]);
       setSelectedTryOnIds(new Set());
       setActiveTryOnId(null);
-      setGeneratedImageUrl(null);
       setActiveImageUrl(null);
       setIsTryOnHistoryLoading(false);
     }
@@ -176,7 +168,6 @@ export default function HomePage() {
           const firstImage = firstCategory.images[0] ?? null;
           if (firstImage) {
             setSelectedDressImageId(firstImage.id);
-            setSelectedDressImageUrl(firstImage.image_url);
             setActiveImageUrl(firstImage.image_url);
           }
         }
@@ -237,7 +228,6 @@ export default function HomePage() {
     setSessionKey(null);
     setUserImageId(null);
     setUploadStatus("idle");
-    setGeneratedImageUrl(null);
     setActiveImageUrl(null);
   };
 
@@ -247,18 +237,15 @@ export default function HomePage() {
     const firstImage = category.images[0] ?? null;
     if (firstImage) {
       setSelectedDressImageId(firstImage.id);
-      setSelectedDressImageUrl(firstImage.image_url);
       setActiveImageUrl(firstImage.image_url);
     } else {
       setSelectedDressImageId(null);
-      setSelectedDressImageUrl(null);
       setActiveImageUrl(null);
     }
   };
 
   const onSelectDressImage = (image: CategoryImage) => {
     setSelectedDressImageId(image.id);
-    setSelectedDressImageUrl(image.image_url);
     setActiveImageUrl(image.image_url);
   };
 
@@ -319,7 +306,6 @@ export default function HomePage() {
         sessionKey: payload.session_key,
       };
 
-      setGeneratedImageUrl(payload.generated_image);
       setActiveImageUrl(payload.generated_image);
       setActiveTryOnId(payload.id);
       setTryOnHistory((prev) => [nextItem, ...prev]);
@@ -410,7 +396,7 @@ export default function HomePage() {
               />
             </div>
 
-            <div className="md:order-2 xl:order-0">
+            <div className="md:order-2 xl:order-0 bg-white">
               <CategoriesPanel
                 categories={categories}
                 selectedCategoryId={selectedCategoryId}
@@ -424,14 +410,14 @@ export default function HomePage() {
               />
             </div>
 
-            <div className="md:order-3 xl:order-0">
+            <div className="md:order-3 xl:order-0 bg-white">
               <ImageViewer
                 generatedImageUrl={activeImageUrl}
                 selectedDressImageUrl={activeImageUrl}
               />
             </div>
 
-            <div className="md:order-4 xl:order-0">
+            <div className="md:order-4 xl:order-0 bg-white">
               <TryOnSidebar
                 tryOnHistory={tryOnHistory}
                 selectedTryOnIds={selectedTryOnIds}
@@ -439,7 +425,6 @@ export default function HomePage() {
                 isLoading={isTryOnHistoryLoading}
                 onToggleTryOn={toggleTryOnSelection}
                 onPreviewTryOn={(item) => {
-                  setGeneratedImageUrl(item.generatedImage);
                   setActiveImageUrl(item.generatedImage);
                   setActiveTryOnId(item.id);
                 }}
