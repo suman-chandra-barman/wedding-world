@@ -55,6 +55,7 @@ export default function ImageViewer({
                         className="block h-auto w-full select-none object-cover"
                         width={600}
                         height={800}
+                        priority={true}
                       />
                     </div>
                   </TransformComponent>
